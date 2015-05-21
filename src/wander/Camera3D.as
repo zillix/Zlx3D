@@ -50,16 +50,27 @@ package wander
 			deadDist = new FlxPoint(100, 0, 100);
 		}
 		
+		public static var TIME_REVERSED:Number = 1.5;
 		public override function update():void
 		{
 			if (followTarget != null)
 			{
+				var followZ:Number = followDist.z;
+				if ((followTarget is Player) &&
+				(followTarget as Player).timeReversed > TIME_REVERSED)
+				{
+					followZ *= 1.8;
+				}
+				
 				var targetPoint:FlxPoint = FlxPoint.addVector(
 					new FlxPoint(
 						followTarget.x,
 						followTarget.y,
 						followTarget.z),
-					followDist);
+					new FlxPoint(
+						followDist.x,
+						followDist.y, 
+						followZ));
 					
 				moveToward(targetPoint);
 					
@@ -94,6 +105,48 @@ package wander
 			if (FlxG.keys.I)
 			{
 				focalLength += FlxG.elapsed * scrollSpeed.z;
+			}
+			
+				
+			//Update the "flash" special effect
+			if(_fxFlashAlpha > 0.0)
+			{
+				_fxFlashAlpha -= FlxG.elapsed/_fxFlashDuration;
+				if((_fxFlashAlpha <= 0) && (_fxFlashComplete != null))
+					_fxFlashComplete();
+			}
+			
+			//Update the "fade" special effect
+			if((_fxFadeAlpha > 0.0) && (_fxFadeAlpha < 1.0))
+			{
+				_fxFadeAlpha += FlxG.elapsed/_fxFadeDuration;
+				if(_fxFadeAlpha >= 1.0)
+				{
+					if(_fxFadeComplete != null)
+						_fxFadeComplete();
+						
+					//_fxFadeAlpha = 0.0;
+					
+				}
+			}
+			
+			//Update the "shake" special effect
+			if(_fxShakeDuration > 0)
+			{
+				_fxShakeDuration -= FlxG.elapsed;
+				if(_fxShakeDuration <= 0)
+				{
+					_fxShakeOffset.make();
+					if(_fxShakeComplete != null)
+						_fxShakeComplete();
+				}
+				else
+				{
+					if((_fxShakeDirection == SHAKE_BOTH_AXES) || (_fxShakeDirection == SHAKE_HORIZONTAL_ONLY))
+						_fxShakeOffset.x = (FlxG.random()*_fxShakeIntensity*width*2-_fxShakeIntensity*width)*_zoom;
+					if((_fxShakeDirection == SHAKE_BOTH_AXES) || (_fxShakeDirection == SHAKE_VERTICAL_ONLY))
+						_fxShakeOffset.y = (FlxG.random()*_fxShakeIntensity*height*2-_fxShakeIntensity*height)*_zoom;
+				}
 			}
 	
 			
@@ -146,6 +199,7 @@ package wander
 				if (reachTargetCallback != null)
 				{
 					reachTargetCallback();
+					reachTargetCallback = null;
 				}
 			}
 		}
@@ -159,8 +213,28 @@ package wander
 			followTarget = object;
 			
 			var xBuffer:int = 20;
-			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (viewWidth - xBuffer);
+			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
 			followDist = new FlxPoint(object.x, object.y - object.height * object.scale.y + 20, desiredZ);
+			followSpeed.y = 150;
+			deadDist = new FlxPoint();
+			
+			reachTargetCallback = function():void 
+			{ 
+				init();
+				followTarget = oldTarget; 
+				followDist = oldFollowDist;
+			}
+		}
+		
+			public function idleScan(object:GameObject):void
+		{
+			var oldTarget:GameObject = followTarget;
+			var oldFollowDist:FlxPoint = followDist;
+			followTarget = object;
+			
+			var xBuffer:int = 20;
+			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
+			followDist = new FlxPoint(0, object.y - object.height * object.scale.y + 20, desiredZ);
 			followSpeed.y = 100;
 			deadDist = new FlxPoint();
 			
@@ -170,6 +244,21 @@ package wander
 				followTarget = oldTarget; 
 				followDist = oldFollowDist;
 			}
+		}
+		
+		public function endScan(object:GameObject, callback:Function = null):void
+		{
+			var oldTarget:GameObject = followTarget;
+			var oldFollowDist:FlxPoint = followDist;
+			followTarget = object;
+			
+			var xBuffer:int = 2;
+			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
+			followDist = new FlxPoint(0, object.y - object.height * object.scale.y / 2, desiredZ);
+			followSpeed.y = 100;
+			deadDist = new FlxPoint();
+			
+			reachTargetCallback = callback;
 		}
 	}
 	

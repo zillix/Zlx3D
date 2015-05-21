@@ -12,7 +12,10 @@ package wander
 	{
 		public var z:Number;
 		public var depth:Number = 10;
-		public static var Z_DIST_CHECK:int = 20;
+		public static var Z_DIST_CHECK:int = 200;
+		
+		public var shadow:Boolean = false;
+		public var annihilated:Boolean = false;
 		
 		public function GameObject(X:Number = 0, Y:Number = 0, Z:Number = 0)
 		{
@@ -20,6 +23,8 @@ package wander
 			z = Z;
 			immovable = true;
 			scale.z = 1;
+			drag = new FlxPoint(0, 0);
+			maxVelocity = new FlxPoint(1000, 1000, 1000);
 		}
 		
 		
@@ -101,6 +106,11 @@ package wander
 		
 		override public function onScreen(Camera:FlxCamera=null):Boolean
 		{
+			if (Camera as Camera3D)
+			{
+				return (Camera as Camera3D).position.z < z + depth / 2;
+			}
+			
 			return true;
 			
 		/*	return  super.onScreen(Camera);
@@ -175,13 +185,47 @@ package wander
 					var object:GameObject = obj as GameObject;
 					if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
-						if (NotifyCallback != null)
+						if (source is Player)
 						{
-							NotifyCallback(source, object);
+							if (PlayState.climbOverlap2(source, ((source as Player).touchedObject as Climbable)))
+							{
+								return false;
+							}
 						}
 						
 						if (ProcessCallback(source, object))
 						{
+							if (NotifyCallback != null)
+							{
+								NotifyCallback(source, object);
+							}
+						
+						
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+		
+		static public function shadowCollide(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
+		{
+			for each (var obj:FlxBasic in group.members)
+			{
+				if (obj == source)
+				{
+					continue;
+				}
+				
+				if (obj is GameObject)
+				{
+					var object:GameObject = obj as GameObject;
+					//if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
+					{
+						if (collideZ(source, object))
+						{
+							NotifyCallback(source, object);
 							return true;
 						}
 					}
@@ -213,8 +257,8 @@ package wander
 			if(Object2 is FlxTilemap)
 				return (Object2 as FlxTilemap).overlapsWithCallback(Object1,separateZ,true);
 
-			var obj1Pos:FlxPoint = new FlxPoint(Object1.x - Object1.offset.x, Object1.y - Object1.offset.y, Object1.z - Object1.offset.z);
-			var obj2Pos:FlxPoint = new FlxPoint(Object2.x - Object2.offset.x, Object2.y - Object2.offset.y, Object2.z - Object2.offset.z);
+			var obj1Pos:FlxPoint = new FlxPoint(Object1.x - Object1.offset.x * Object1.scale.x, Object1.y - Object1.offset.y * Object1.scale.y, Object1.z - Object1.offset.z);
+			var obj2Pos:FlxPoint = new FlxPoint(Object2.x - Object2.offset.x * Object2.scale.x, Object2.y - Object2.offset.y * Object2.scale.y, Object2.z - Object2.offset.z);
 			
 			//First, get the two object deltas
 			var overlap:Number = 0;
@@ -301,6 +345,141 @@ package wander
 			}
 			else
 				return false;
+		}
+		
+		static public function collideZ(Object1:GameObject, Object2:GameObject):Boolean
+		{
+			var obj1Pos:FlxPoint = new FlxPoint(Object1.x - Object1.offset.x, Object1.y - Object1.offset.y, Object1.z - Object1.offset.z);
+			var obj2Pos:FlxPoint = new FlxPoint(Object2.x - Object2.offset.x, Object2.y - Object2.offset.y, Object2.z - Object2.offset.z);
+			
+			//First, get the two object deltas
+			var overlap:Number = 0;
+			{
+				//Check if the Z hulls actually overlap (x/z plane)
+				var obj1rect:FlxRect = new FlxRect(obj1Pos.x,obj1Pos.z,Object1.width * Object1.scale.x,Object1.depth * Object1.scale.z);
+				var obj2rect:FlxRect = new FlxRect(obj2Pos.x,obj2Pos.z,Object2.width * Object2.scale.x,Object2.depth * Object2.scale.z);
+				
+				if((obj1rect.x + obj1rect.width > obj2rect.x) && (obj1rect.x < obj2rect.x + obj2rect.width) && (obj1rect.y + obj1rect.height > obj2rect.y) && (obj1rect.y < obj2rect.y + obj2rect.height))
+				{
+					overlap = 1;
+					/*var maxOverlap:Number = obj1deltaAbs + obj2deltaAbs + OVERLAP_BIAS;
+					
+					//If they did overlap (and can), figure out by how much and flip the corresponding flags
+					if(obj1delta > obj2delta)
+					{
+						overlap = obj1Pos.z + Object1.depth - obj2Pos.z;
+					
+						if(overlap > maxOverlap)
+							overlap = 0;
+						else
+						{
+							Object1.touching |= DOWN;
+							Object2.touching |= UP;
+						}
+					}
+					else if(obj1delta < obj2delta)
+					{
+						overlap = obj1Pos.z - obj2Pos.z - Object2.depth;
+						if(-overlap > maxOverlap)
+							overlap = 0;
+						else
+						{
+							Object1.touching |= UP;
+							Object2.touching |= DOWN;
+						}
+					}*/
+				}
+			}
+			
+			return overlap != 0;
+		}
+		
+		public function get left():Number
+		{
+			return x /*- (offset.x * scale.x)*/ - width / 2 * scale.x;; 
+		}
+		
+		public function get right():Number
+		{
+			return x /*+ (offset.x * scale.x)*/ + width/ 2 * scale.x; 
+		}
+		
+		public function get top():Number
+		{
+			return y /*- (offset.y * scale.y)*/ - height * scale.y; 
+		}
+		
+		public function get bottom():Number
+		{
+			return y /*+ (offset.y * scale.y)*//* + height/2 * scale.y*/; 
+		}
+		
+		public function moveTowards(point:FlxPoint, speed:Number, threshold:Number):Boolean
+		{
+			var position:FlxPoint = new FlxPoint(x, y, z);
+			if (position.x < point.x)
+			{
+				position.x = Math.min(point.x, position.x + FlxG.elapsed * speed);
+			}
+			if (position.x > point.x)
+			{
+				position.x = Math.max(point.x,position. x - FlxG.elapsed * speed);
+			}
+			
+			if (position.y < point.y)
+			{
+				position.y = Math.min(point.y, position.y + FlxG.elapsed * speed);
+			}
+			if (position.y > point.y)
+			{
+				position.y = Math.max(point.y, position.y - FlxG.elapsed * speed);
+			}
+			
+			if (position.z < point.z)
+			{
+				position.z = Math.min(point.z, position.z + FlxG.elapsed * speed);
+			}
+			if (position.z > point.z)
+			{
+				position.z = Math.max(point.z, position.z - FlxG.elapsed * speed);
+			}
+			
+			x = position.x;
+			y = position.y;
+			z = position.z;
+			
+			if (FlxU.getDistance(point, position) < threshold)
+			{
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public function annihilate(color:uint = 0):void
+		{
+			if (color == 0)
+			{
+				color = Particle3D.GENERIC;
+			}
+			
+			var numParticles:int = 30;
+			var PARTICLE_GRAVITY:Number = 200;
+			var emit:Emitter3D = new Emitter3D(x, y, z, numParticles);
+			emit.particleDrag = new FlxPoint(10, 10);
+			emit.gravity = PARTICLE_GRAVITY;
+			emit.setXSpeed( -200, 200);
+			emit.setYSpeed( -300, -50);
+			var gib:Particle3D;
+			for (var i:int = 0; i < numParticles; i++) {
+				gib = new Particle3D(color);
+				emit.add(gib);
+				gib.scale = new FlxPoint(2, 2);
+			}
+			PlayState.instance.objects.add(emit);
+			emit.beginEmit(true, 2, .07, 0, 2);
+			play("dead");
+			annihilated = true;
 		}
 	}
 	

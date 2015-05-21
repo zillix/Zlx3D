@@ -3,6 +3,7 @@ package wander
 	import adobe.utils.CustomActions;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.ui.Mouse;
 	import org.flixel.*;
@@ -19,6 +20,13 @@ package wander
 		public var obstacle:GameObject;
 		
 		public var objects:FlxGroup;
+		
+		public static var GROUND_HEIGHT:int = 0;
+		public static const GRAVITY:int = 1000;
+		
+		
+		
+		public var bounds:Rectangle = new Rectangle();
 		
 		[Embed(source = "../data/arch1.png")]	public var ArchSprite:Class;
 		[Embed(source = "../data/pass.png")]	public var PassSprite:Class;
@@ -114,8 +122,6 @@ package wander
 		{
 			FlxQuadTree.divisions = FlxG.worldDivisions;
 			var tilemap:Tilemap3D = climbable.tileMap;
-			//trace("climbable", climbable.x - climbable.width / 2, climbable.y - climbable.height, climbable.width, climbable.height);
-			//trace("player", PlayState.instance.player.x, PlayState.instance.player.y);
 			tilemap.x -= tilemap.offset.x;
 			tilemap.y -= tilemap.offset.y;
 			tilemap.last.x = tilemap.x;
@@ -125,11 +131,14 @@ package wander
 			object1.y -= object1.offset.y;
 			object1.last.x -= object1.offset.x;
 			object1.last.y -= object1.offset.y;
-			var quadTree:FlxQuadTree = new FlxQuadTree(tilemap.x - tilemap.width,tilemap.y - tilemap.height * 2,tilemap.width * 4,tilemap.height * 4);
 			
-			trace(tilemap.x, tilemap.y, object1.x, object1.y);
-			quadTree.load(object1,tilemap,NotifyCallback,ProcessCallback);
-			var result:Boolean = quadTree.execute();
+			var saveScale:FlxPoint = object1.scale;
+		//	object1.scale = new FlxPoint(.5, .5);
+			//var quadTree:FlxQuadTree = new FlxQuadTree(tilemap.x - tilemap.width,tilemap.y - tilemap.height * 2,tilemap.width * 4,tilemap.height * 4);
+			var result:Boolean = NotifyCallback(object1, tilemap);
+			object1.scale = saveScale;
+		//	quadTree.load(object1,tilemap,NotifyCallback,ProcessCallback);
+		//	var result:Boolean = quadTree.execute();
 			tilemap.x += tilemap.offset.x;
 			tilemap.y += tilemap.offset.y;
 			tilemap.last.x = tilemap.x;
@@ -139,19 +148,61 @@ package wander
 			object1.last.x += object1.offset.x;
 			object1.last.y += object1.offset.y;
 			
-			quadTree.destroy();
+			//quadTree.destroy();
+			return result;
+		}
+		
+		public static function climbOverlap2(object1:FlxSprite = null, climbable:Climbable = null):Boolean
+		{
+			if (climbable == null)
+			{
+				return false;
+			}
+			
+			var tilemap:Tilemap3D = climbable.tileMap;
+			tilemap.x -= tilemap.offset.x;
+			tilemap.y -= tilemap.offset.y;
+			tilemap.last.x = tilemap.x;
+			tilemap.last.y = tilemap.y;
+			
+			
+			object1.x -= object1.offset.x;
+			object1.y -= object1.offset.y;
+			object1.last.x -= object1.offset.x;
+			object1.last.y -= object1.offset.y;
+			
+				var saveScale:FlxPoint = object1.scale;
+			object1.scale = new FlxPoint(.5, .5);
+			
+			var result:Boolean = tilemap.overlapsWithCallback(object1);
+		
+			object1.scale = saveScale;
+			
+			tilemap.x += tilemap.offset.x;
+			tilemap.y += tilemap.offset.y;
+			tilemap.last.x = tilemap.x;
+			tilemap.last.y = tilemap.y;
+			object1.x += object1.offset.x;
+			object1.y += object1.offset.y;
+			object1.last.x += object1.offset.x;
+			object1.last.y += object1.offset.y;
+			
+			//quadTree.destroy();
 			return result;
 		}
 		
 		public function loadMapImage(mapImage:Class):void
 		{
 			var bitmapData:BitmapData = FlxG.addBitmap(mapImage);
-			var row:uint = 0;
 			var column:uint;
 			var pixel:uint;
 			var bitmapWidth:uint = bitmapData.width;
 			var bitmapHeight:uint = bitmapData.height;
-			while(row < bitmapHeight)
+			var row:uint = bitmapHeight - 1;
+			
+			
+			bounds = new Rectangle( -bitmapWidth / 2 * MAP_SCALE, 0, bitmapWidth * MAP_SCALE, bitmapHeight * MAP_SCALE);
+			while(row >= 0)
 			{
 				column = 0;
 				while(column < bitmapWidth)
@@ -163,7 +214,15 @@ package wander
 					
 					column++;
 				}
-				row++;
+				if (row == 0)
+				{
+					break;
+				}
+				else
+				{
+					row--;
+				}
+			
 			}
 		}
 		
@@ -234,6 +293,32 @@ package wander
 		public static function get camera():Camera3D
 		{
 			return FlxG.camera as Camera3D;
+		}
+		
+		public function fitBounds(gameObject:GameObject):void
+		{
+			var direction:int = 0;
+			if (gameObject.x < bounds.x)
+			{
+				direction = 1;
+				gameObject.x = bounds.x;
+			}
+			if (gameObject.x > bounds.x + bounds.width)
+			{
+				direction = -1;
+				gameObject.x = bounds.x + bounds.width;
+			}
+			
+			if (gameObject.z < bounds.y)
+			{
+				direction = gameObject.facing == FlxObject.LEFT ? 1 : -1;
+				gameObject.z = bounds.y;
+			}
+			if (gameObject.z > bounds.y + bounds.height)
+			{
+				direction = gameObject.facing == FlxObject.LEFT ? 1 : -1;
+				gameObject.z = bounds.y + bounds.height;
+			}
 		}
 	}
 }

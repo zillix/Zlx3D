@@ -21,8 +21,7 @@ package wander
 			this.setOffsets();
 			tileMap.y =  0;
 			tileMap.x = X;
-			//tileMap.x = - 250;//-tileMap.width / 2;
-			tileMap.offset = new FlxPoint(tileMap.width / 2, tileMap.height);// tileMap.width / 2, tileMap.height / 2);
+			tileMap.offset = new FlxPoint(tileMap.width / 2, tileMap.height);
 			tileMap.origin = new FlxPoint(tileMap.width / 2, tileMap.height);
 			PlayState.instance.objects.add(tileMap);
 		}
