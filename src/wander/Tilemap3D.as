@@ -40,7 +40,7 @@ package wander
 				
 				var buffer:FlxTilemapBuffer;
 				if(_buffers[0] == null)
-					_buffers[0] = new FlxTilemapBuffer(_tileWidth,_tileHeight,widthInTiles,heightInTiles,camera, false);
+					_buffers[0] = new FlxTilemapBuffer(_tileWidth, _tileHeight, widthInTiles, heightInTiles, camera); // TODO(alex): Do I need this? , false);
 				buffer = _buffers[0] as FlxTilemapBuffer;
 				
 				var dX:Number = zScale * (x - camera.position.x) - offset.x;

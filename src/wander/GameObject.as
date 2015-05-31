@@ -20,11 +20,19 @@ package wander
 		public function GameObject(X:Number = 0, Y:Number = 0, Z:Number = 0)
 		{
 			super(X, Y);
+			
+			// We need to reassign several variables to use the 3d versions
+			last = new ZlxPoint(X, Y, Z);
+			scale = new ZlxPoint(1, 1, 1);
+			velocity = new ZlxPoint();
+			acceleration = new ZlxPoint();
+			offset = new ZlxPoint();
+			drag = new ZlxPoint();
+			maxVelocity = new ZlxPoint(10000,10000);
+			
 			z = Z;
 			immovable = true;
-			scale.z = 1;
-			drag = new FlxPoint(0, 0);
-			maxVelocity = new FlxPoint(1000, 1000, 1000);
+			maxVelocity = new ZlxPoint(1000, 1000, 1000);
 		}
 		
 		
@@ -94,13 +102,13 @@ package wander
 		
 		override public function preUpdate():void
 		{
-			last.z = z;
+			ZlxPoint(last).z = z;
 			super.preUpdate();
 		}
 		
 		override public function reset(X:Number,Y:Number):void
 		{
-			last.z = z;
+			ZlxPoint(last).z = z;
 			reset(X, Y);
 		}
 		
@@ -145,11 +153,19 @@ package wander
 			super.updateMotion();
 			var delta:Number;
 			var velocityDelta:Number;
-
-			velocityDelta = (FlxU.computeVelocity(velocity.z,acceleration.z,drag.z,maxVelocity.z) - velocity.z)/2;
-			velocity.z += velocityDelta;
-			delta = velocity.z*FlxG.elapsed;
-			velocity.z += velocityDelta;
+			
+			velocityDelta = (
+								FlxU.computeVelocity(
+													ZlxPoint(velocity).z,
+													ZlxPoint(acceleration).z,
+													ZlxPoint(drag).z,
+													ZlxPoint(maxVelocity).z
+													)
+									- ZlxPoint(velocity).z
+							) / 2;
+			ZlxPoint(velocity).z += velocityDelta;
+			delta = ZlxPoint(velocity).z*FlxG.elapsed;
+			ZlxPoint(velocity).z += velocityDelta;
 			z += delta;
 		}
 		
@@ -257,20 +273,20 @@ package wander
 			if(Object2 is FlxTilemap)
 				return (Object2 as FlxTilemap).overlapsWithCallback(Object1,separateZ,true);
 
-			var obj1Pos:FlxPoint = new FlxPoint(Object1.x - Object1.offset.x * Object1.scale.x, Object1.y - Object1.offset.y * Object1.scale.y, Object1.z - Object1.offset.z);
-			var obj2Pos:FlxPoint = new FlxPoint(Object2.x - Object2.offset.x * Object2.scale.x, Object2.y - Object2.offset.y * Object2.scale.y, Object2.z - Object2.offset.z);
+			var obj1Pos:ZlxPoint = new ZlxPoint(Object1.x - Object1.offset.x * Object1.scale.x, Object1.y - Object1.offset.y * Object1.scale.y, Object1.z - ZlxPoint(Object1.offset).z);
+			var obj2Pos:ZlxPoint = new ZlxPoint(Object2.x - Object2.offset.x * Object2.scale.x, Object2.y - Object2.offset.y * Object2.scale.y, Object2.z - ZlxPoint(Object2.offset).z);
 			
 			//First, get the two object deltas
 			var overlap:Number = 0;
-			var obj1delta:Number = Object1.z - Object1.last.z;
-			var obj2delta:Number = Object2.z - Object2.last.z;
+			var obj1delta:Number = Object1.z - ZlxPoint(Object1.last).z;
+			var obj2delta:Number = Object2.z - ZlxPoint(Object2.last).z;
 			if(obj1delta != obj2delta)
 			{
 				//Check if the Z hulls actually overlap (y/z plane)
 				var obj1deltaAbs:Number = (obj1delta > 0)?obj1delta:-obj1delta;
 				var obj2deltaAbs:Number = (obj2delta > 0)?obj2delta:-obj2delta;
-				var obj1rect:FlxRect = new FlxRect(obj1Pos.x,obj1Pos.z-((obj1delta > 0)?obj1delta:0),Object1.width * Object1.scale.x,Object1.depth * Object1.scale.z+obj1deltaAbs);
-				var obj2rect:FlxRect = new FlxRect(obj2Pos.x,obj2Pos.z-((obj2delta > 0)?obj2delta:0),Object2.width * Object2.scale.x,Object2.depth * Object2.scale.z+obj2deltaAbs);
+				var obj1rect:FlxRect = new FlxRect(obj1Pos.x,obj1Pos.z-((obj1delta > 0)?obj1delta:0),Object1.width * Object1.scale.x,Object1.depth * ZlxPoint(Object1.scale).z+obj1deltaAbs);
+				var obj2rect:FlxRect = new FlxRect(obj2Pos.x,obj2Pos.z-((obj2delta > 0)?obj2delta:0),Object2.width * Object2.scale.x,Object2.depth * ZlxPoint(Object2.scale).z+obj2deltaAbs);
 				
 				if((obj1rect.x + obj1rect.width > obj2rect.x) && (obj1rect.x < obj2rect.x + obj2rect.width) && (obj1rect.y + obj1rect.height > obj2rect.y) && (obj1rect.y < obj2rect.y + obj2rect.height))
 				{
@@ -306,8 +322,8 @@ package wander
 			//Then adjust their positions and velocities accordingly (if there was any overlap)
 			if(overlap != 0)
 			{
-				var obj1v:Number = Object1.velocity.z;
-				var obj2v:Number = Object2.velocity.z;
+				var obj1v:Number = ZlxPoint(Object1.velocity).z;
+				var obj2v:Number = ZlxPoint(Object2.velocity).z;
 				
 				if(!obj1immovable && !obj2immovable)
 				{
@@ -322,13 +338,13 @@ package wander
 					var average:Number = (obj1velocity + obj2velocity)*0.5;
 					obj1velocity -= average;
 					obj2velocity -= average;
-					Object1.velocity.z = average + obj1velocity * Object1.elasticity;
-					Object2.velocity.z = average + obj2velocity * Object2.elasticity;
+					ZlxPoint(Object1.velocity).z = average + obj1velocity * Object1.elasticity;
+					ZlxPoint(Object2.velocity).z = average + obj2velocity * Object2.elasticity;
 				}
 				else if(!obj1immovable)
 				{
 					Object1.z = Object1.z - overlap;
-					Object1.velocity.z = obj2v - obj1v*Object1.elasticity;
+					ZlxPoint(Object1.velocity).z = obj2v - obj1v*Object1.elasticity;
 					//This is special case code that handles cases like horizontal moving platforms you can ride
 					if(Object2.active && Object2.moves && (obj1delta > obj2delta))
 						Object1.x += Object2.x - Object2.last.x;
@@ -336,7 +352,7 @@ package wander
 				else if(!obj2immovable)
 				{
 					Object2.z += overlap;
-					Object2.velocity.z = obj1v - obj2v*Object2.elasticity;
+					ZlxPoint(Object2.velocity).z = obj1v - obj2v*Object2.elasticity;
 					//This is special case code that handles cases like horizontal moving platforms you can ride
 					if(Object1.active && Object1.moves && (obj1delta < obj2delta))
 						Object2.x += Object1.x - Object1.last.x;
@@ -349,15 +365,15 @@ package wander
 		
 		static public function collideZ(Object1:GameObject, Object2:GameObject):Boolean
 		{
-			var obj1Pos:FlxPoint = new FlxPoint(Object1.x - Object1.offset.x, Object1.y - Object1.offset.y, Object1.z - Object1.offset.z);
-			var obj2Pos:FlxPoint = new FlxPoint(Object2.x - Object2.offset.x, Object2.y - Object2.offset.y, Object2.z - Object2.offset.z);
+			var obj1Pos:ZlxPoint = new ZlxPoint(Object1.x - Object1.offset.x, Object1.y - Object1.offset.y, Object1.z - ZlxPoint(Object1.offset).z);
+			var obj2Pos:ZlxPoint = new ZlxPoint(Object2.x - Object2.offset.x, Object2.y - Object2.offset.y, Object2.z - ZlxPoint(Object2.offset).z);
 			
 			//First, get the two object deltas
 			var overlap:Number = 0;
 			{
 				//Check if the Z hulls actually overlap (x/z plane)
-				var obj1rect:FlxRect = new FlxRect(obj1Pos.x,obj1Pos.z,Object1.width * Object1.scale.x,Object1.depth * Object1.scale.z);
-				var obj2rect:FlxRect = new FlxRect(obj2Pos.x,obj2Pos.z,Object2.width * Object2.scale.x,Object2.depth * Object2.scale.z);
+				var obj1rect:FlxRect = new FlxRect(obj1Pos.x,obj1Pos.z,Object1.width * Object1.scale.x,Object1.depth * ZlxPoint(Object1.scale).z);
+				var obj2rect:FlxRect = new FlxRect(obj2Pos.x,obj2Pos.z,Object2.width * Object2.scale.x,Object2.depth * ZlxPoint(Object2.scale).z);
 				
 				if((obj1rect.x + obj1rect.width > obj2rect.x) && (obj1rect.x < obj2rect.x + obj2rect.width) && (obj1rect.y + obj1rect.height > obj2rect.y) && (obj1rect.y < obj2rect.y + obj2rect.height))
 				{
@@ -414,9 +430,9 @@ package wander
 			return y /*+ (offset.y * scale.y)*//* + height/2 * scale.y*/; 
 		}
 		
-		public function moveTowards(point:FlxPoint, speed:Number, threshold:Number):Boolean
+		public function moveTowards(point:ZlxPoint, speed:Number, threshold:Number):Boolean
 		{
-			var position:FlxPoint = new FlxPoint(x, y, z);
+			var position:ZlxPoint = new ZlxPoint(x, y, z);
 			if (position.x < point.x)
 			{
 				position.x = Math.min(point.x, position.x + FlxG.elapsed * speed);

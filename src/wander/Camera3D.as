@@ -9,7 +9,7 @@ package wander
 	 */
 	public class Camera3D extends FlxCamera 
 	{
-		private var scrollSpeed:FlxPoint;
+		private var scrollSpeed:ZlxPoint;
 		
 		public var focalLength:int = 200;
 		public var fieldOfView:int;
@@ -19,13 +19,13 @@ package wander
 		public var viewHeight:Number;
 		public var viewWidth:Number;
 		
-		public var position:FlxPoint;
+		public var position:ZlxPoint;
 		
-		public var followDist:FlxPoint;
+		public var followDist:ZlxPoint;
 		public var followTarget:GameObject;
-		public var followSpeed:FlxPoint;
+		public var followSpeed:ZlxPoint;
 		
-		public var deadDist:FlxPoint;
+		public var deadDist:ZlxPoint;
 		
 		public var reachTargetCallback:Function;
 		
@@ -33,7 +33,7 @@ package wander
 		{
 			init();
 		
-			position = new FlxPoint();
+			position = new ZlxPoint();
 			ratio = FlxG.height / FlxG.width;
 			z = 0;
 			
@@ -45,12 +45,12 @@ package wander
 		
 		public function init():void
 		{
-			scrollSpeed = new FlxPoint(100, 100, 100);
-			followSpeed = new FlxPoint(300, 300, 500);
-			deadDist = new FlxPoint(100, 0, 100);
+			scrollSpeed = new ZlxPoint(100, 100, 100);
+			followSpeed = new ZlxPoint(300, 300, 500);
+			deadDist = new ZlxPoint(100, 0, 100);
 		}
 		
-		public static var TIME_REVERSED:Number = 1.5;
+		public static var TIME_REVERSED:Number = 0.5;
 		public override function update():void
 		{
 			if (followTarget != null)
@@ -62,12 +62,12 @@ package wander
 					followZ *= 1.8;
 				}
 				
-				var targetPoint:FlxPoint = FlxPoint.addVector(
-					new FlxPoint(
+				var targetPoint:ZlxPoint = ZlxPoint.addVector(
+					new ZlxPoint(
 						followTarget.x,
 						followTarget.y,
 						followTarget.z),
-					new FlxPoint(
+					new ZlxPoint(
 						followDist.x,
 						followDist.y, 
 						followZ));
@@ -153,7 +153,7 @@ package wander
 		
 		}
 		
-		private function moveToward(point:FlxPoint):void
+		private function moveToward(point:ZlxPoint):void
 		{
 			if (Math.abs(position.x - point.x) > deadDist.x)
 			{
@@ -209,14 +209,14 @@ package wander
 		public function startScan(object:GameObject):void
 		{
 			var oldTarget:GameObject = followTarget;
-			var oldFollowDist:FlxPoint = followDist;
+			var oldFollowDist:ZlxPoint = followDist;
 			followTarget = object;
 			
 			var xBuffer:int = 20;
 			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new FlxPoint(object.x, object.y - object.height * object.scale.y + 20, desiredZ);
+			followDist = new ZlxPoint(object.x, object.y - object.height * object.scale.y + 20, desiredZ);
 			followSpeed.y = 150;
-			deadDist = new FlxPoint();
+			deadDist = new ZlxPoint();
 			
 			reachTargetCallback = function():void 
 			{ 
@@ -229,14 +229,14 @@ package wander
 			public function idleScan(object:GameObject):void
 		{
 			var oldTarget:GameObject = followTarget;
-			var oldFollowDist:FlxPoint = followDist;
+			var oldFollowDist:ZlxPoint = followDist;
 			followTarget = object;
 			
 			var xBuffer:int = 20;
 			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new FlxPoint(0, object.y - object.height * object.scale.y + 20, desiredZ);
+			followDist = new ZlxPoint(0, object.y - object.height * object.scale.y + 20, desiredZ);
 			followSpeed.y = 100;
-			deadDist = new FlxPoint();
+			deadDist = new ZlxPoint();
 			
 			reachTargetCallback = function():void 
 			{ 
@@ -254,11 +254,17 @@ package wander
 			
 			var xBuffer:int = 2;
 			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new FlxPoint(0, object.y - object.height * object.scale.y / 2, desiredZ);
+			followDist = new ZlxPoint(0, object.y - object.height * object.scale.y / 2, desiredZ);
 			followSpeed.y = 100;
-			deadDist = new FlxPoint();
+			deadDist = new ZlxPoint();
 			
 			reachTargetCallback = callback;
+		}
+		
+		override public function fill(Color:uint,BlendAlpha:Boolean=true):void
+		{
+			// Never blend the alpha
+			super.fill(Color, false);
 		}
 	}
 	

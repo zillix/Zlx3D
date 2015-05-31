@@ -57,18 +57,17 @@ package org.flixel.system
 		 * @param HeightInTiles	How many tiles tall the tilemap is.
 		 * @param Camera		Which camera this buffer relates to.
 		 */
-		public function FlxTilemapBuffer(TileWidth:Number,TileHeight:Number,WidthInTiles:uint,HeightInTiles:uint,Camera:FlxCamera=null, capTiles:Boolean = true)
+		public function FlxTilemapBuffer(TileWidth:Number,TileHeight:Number,WidthInTiles:uint,HeightInTiles:uint,Camera:FlxCamera=null)
 		{
 			if(Camera == null)
 				Camera = FlxG.camera;
 
-			columns = WidthInTiles;
-			rows = HeightInTiles;
-			if (capTiles)
-			{
-				columns = Math.min(FlxU.ceil(Camera.width/TileWidth)+1, columns);
-				rows = Math.min(FlxU.ceil(Camera.height / TileHeight) + 1, rows);
-			}
+			columns = FlxU.ceil(Camera.width/TileWidth)+1;
+			if(columns > WidthInTiles)
+				columns = WidthInTiles;
+			rows = FlxU.ceil(Camera.height/TileHeight)+1;
+			if(rows > HeightInTiles)
+				rows = HeightInTiles;
 			
 			_pixels = new BitmapData(columns*TileWidth,rows*TileHeight,true,0);
 			width = _pixels.width;
@@ -104,11 +103,6 @@ package org.flixel.system
 		public function get pixels():BitmapData
 		{
 			return _pixels;
-		}
-		
-		public function get flashRect():Rectangle
-		{
-			return _flashRect;
 		}
 		
 		/**

@@ -1,16 +1,12 @@
 package org.flixel
 {
-	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.geom.Matrix;
-	import flash.geom.Matrix3D;
-	import flash.geom.PerspectiveProjection;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import flash.geom.Vector3D;
 	
 	import org.flixel.plugin.DebugPathDisplay;
 	import org.flixel.plugin.TimerManager;
@@ -830,25 +826,6 @@ package org.flixel
 			return NewCamera;
 		}
 		
-		/*static public function addHorizon(bitmapData:BitmapData):void
-		{
-			var bitmap:Bitmap = new Bitmap(bitmapData);
-			bitmap.transform.matrix3D
-		}*/
-		
-		static public function setupPerpsective(groundClass:Class):void
-		{
-			/*stage.transform.perspectiveProjection = new PerspectiveProjection();
-			var ground:Bitmap = new Bitmap(FlxG.addBitmap(groundClass));
-			var matrix:Matrix3D = new Matrix3D();
-			matrix.appendTranslation(FlxG.width / 2 - ground.width / 2,-FlxG.height, -155);
-			//matrix.appendScale(10, 10, 10);
-			matrix.appendRotation(90, Vector3D.X_AXIS);
-			ground.transform.matrix3D = matrix;
-			FlxG._game.addChildAt(ground, 0);*/
-			//FlxG._game.transform.matrix3D = matrix;
-		}
-		
 		/**
 		 * Remove a camera from the game.
 		 * 
@@ -1194,7 +1171,7 @@ package org.flixel
 					continue;
 				if(useBufferLocking)
 					cam.buffer.lock();
-				cam.fill(cam.bgColor, false);
+				cam.fill(cam.bgColor);
 				cam.screen.dirty = true;
 			}
 		}

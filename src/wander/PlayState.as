@@ -56,7 +56,7 @@ package wander
 			camera.scroll.x = -FlxG.width / 2;
 			camera.scroll.y = -FlxG.height / 2;
 			camera.followTarget = player;
-			camera.followDist = new FlxPoint(0, -100, -camera.focalLength);
+			camera.followDist = new ZlxPoint(0, -100, -camera.focalLength);
 			
 			super.create();
 			objects.add(player);
@@ -92,7 +92,8 @@ package wander
 			pass.setOffsets();
 			objects.add(pass);*/
 			
-			FlxG.setupPerpsective(GroundSprite);
+			// TODO(alex): Figure out if this actually gets used
+			//FlxG.setupPerpsective(GroundSprite);
 		}
 		
 		override public function update():void

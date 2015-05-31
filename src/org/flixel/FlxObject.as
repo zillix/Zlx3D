@@ -3,7 +3,6 @@ package org.flixel
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Point;
-	import wander.GameObject;
 	
 	import org.flixel.FlxBasic;
 	
@@ -713,7 +712,7 @@ package org.flixel
 			if(Camera == null)
 				Camera = FlxG.camera;
 			var objectScreenPos:FlxPoint = object.getScreenXY(null,Camera);
-			getScreenXY(_point, Camera);
+			getScreenXY(_point,Camera);
 			return	(objectScreenPos.x + object.width > _point.x) && (objectScreenPos.x < _point.x + width) &&
 					(objectScreenPos.y + object.height > _point.y) && (objectScreenPos.y < _point.y + height);
 		}
@@ -963,7 +962,7 @@ package org.flixel
 		static public function separate(Object1:FlxObject, Object2:FlxObject):Boolean
 		{
 			var separatedX:Boolean = separateX(Object1,Object2);
-			var separatedY:Boolean = separateY(Object1, Object2);
+			var separatedY:Boolean = separateY(Object1,Object2);
 			return separatedX || separatedY;
 		}
 		

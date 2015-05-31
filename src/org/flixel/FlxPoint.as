@@ -18,19 +18,16 @@ package org.flixel
 		 */
 		public var y:Number;
 		
-		public var z:Number;
-		
 		/**
 		 * Instantiate a new point object.
 		 * 
 		 * @param	X		The X-coordinate of the point in space.
 		 * @param	Y		The Y-coordinate of the point in space.
 		 */
-		public function FlxPoint(X:Number=0, Y:Number=0, Z:Number=0)
+		public function FlxPoint(X:Number=0, Y:Number=0)
 		{
 			x = X;
 			y = Y;
-			z = Z;
 		}
 		
 		/**
@@ -39,11 +36,10 @@ package org.flixel
 		 * @param	X		The X-coordinate of the point in space.
 		 * @param	Y		The Y-coordinate of the point in space.
 		 */
-		public function make(X:Number=0, Y:Number=0, Z:Number=0):FlxPoint
+		public function make(X:Number=0, Y:Number=0):FlxPoint
 		{
 			x = X;
 			y = Y;
-			z = Z;
 			return this;
 		}
 		
@@ -58,7 +54,6 @@ package org.flixel
 		{
 			x = Point.x;
 			y = Point.y;
-			z = Point.z;
 			return this;
 		}
 		
@@ -73,7 +68,6 @@ package org.flixel
 		{
 			Point.x = x;
 			Point.y = y;
-			Point.z = z;
 			return Point;
 		}
 		
@@ -88,7 +82,6 @@ package org.flixel
 		{
 			x = FlashPoint.x;
 			y = FlashPoint.y;
-			z = 0;
 			return this;
 		}
 		
@@ -104,26 +97,6 @@ package org.flixel
 			FlashPoint.x = x;
 			FlashPoint.y = y;
 			return FlashPoint;
-		}
-		
-		public static function getVector(srcPoint:FlxPoint, dstPoint:FlxPoint):FlxPoint
-		{
-			var point:FlxPoint = new FlxPoint();
-			dstPoint.copyTo(point);
-			point.x -= srcPoint.x;
-			point.y -= srcPoint.y;
-			point.z -= srcPoint.z;
-			return point;
-		}
-		
-		public static function addVector(srcPoint:FlxPoint, vector:FlxPoint) : FlxPoint
-		{
-			var point:FlxPoint = new FlxPoint();
-			srcPoint.copyTo(point);
-			point.x += vector.x;
-			point.y += vector.y;
-			point.z += vector.z;
-			return point;
 		}
 	}
 }

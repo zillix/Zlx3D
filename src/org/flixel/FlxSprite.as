@@ -247,6 +247,7 @@ package org.flixel
 		public function loadGraphic(Graphic:Class,Animated:Boolean=false,Reverse:Boolean=false,Width:uint=0,Height:uint=0,Unique:Boolean=false):FlxSprite
 		{
 			_bakedRotation = 0;
+			_bakedRotation = 0;
 			_pixels = FlxG.addBitmap(Graphic,Reverse,Unique);
 			if(Reverse)
 				_flipped = _pixels.width>>1;
@@ -286,11 +287,22 @@ package org.flixel
 		 * 
 		 * @return	This FlxSprite instance (nice for chaining stuff together, if you're into that).
 		 */
-		public function loadRotatedGraphic(Graphic:Class, Rotations:uint=16, Frame:int=-1, AntiAliasing:Boolean=false, AutoBuffer:Boolean=false):FlxSprite
+		public function loadRotatedGraphic(Graphic:Class, Rotations:uint=16, Frame:int=-1, AntiAliasing:Boolean=false, AutoBuffer:Boolean=false, Scale:Number = 1.0):FlxSprite
 		{
 			//Create the brush and canvas
 			var rows:uint = Math.sqrt(Rotations);
-			var brush:BitmapData = FlxG.addBitmap(Graphic);
+			var raw:BitmapData = FlxG.addBitmap(Graphic);
+			var brush:BitmapData = raw;
+			
+			if (Scale != 1.0)
+			{
+				var matrix:Matrix = new Matrix();
+				matrix.scale(Scale, Scale);
+
+				brush = new BitmapData(raw.width * Scale, raw.height * Scale, true, 0x000000);
+				brush.draw(raw, matrix, null, null, null, true);
+			}
+			
 			if(Frame >= 0)
 			{
 				//Using just a segment of the graphic - find the right bit here
@@ -630,7 +642,7 @@ package org.flixel
 		 */
 		public function play(AnimName:String,Force:Boolean=false):void
 		{
-			if(!Force && (_curAnim != null) && (AnimName == _curAnim.name) && (!_curAnim.looped || !finished)) return;
+			if(!Force && (_curAnim != null) && (AnimName == _curAnim.name) && (_curAnim.looped || !finished)) return;
 			_curFrame = 0;
 			_curIndex = 0;
 			_frameTimer = 0;

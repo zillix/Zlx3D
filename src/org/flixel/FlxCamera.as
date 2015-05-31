@@ -223,7 +223,7 @@ package org.flixel
 			_point = new FlxPoint();
 			bounds = null;
 			screen = new FlxSprite();
-			screen.makeGraphic(width,height,0xffffffff,true);
+			screen.makeGraphic(width,height,0,true);
 			screen.setOriginToCorner();
 			buffer = screen.pixels;
 			bgColor = FlxG.bgColor;
@@ -343,11 +343,9 @@ package org.flixel
 				_fxFadeAlpha += FlxG.elapsed/_fxFadeDuration;
 				if(_fxFadeAlpha >= 1.0)
 				{
+					_fxFadeAlpha = 1.0;
 					if(_fxFadeComplete != null)
 						_fxFadeComplete();
-						
-					_fxFadeAlpha = 0.0;
-					
 				}
 			}
 			

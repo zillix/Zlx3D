@@ -65,7 +65,7 @@ package wander
 			
 			
 			// TODO(alex): This should be tracked by the camera
-			if (velocity.z < 0)
+			if (ZlxPoint(velocity).z < 0)
 			{
 				timeReversed += FlxG.elapsed;
 			}
@@ -142,15 +142,15 @@ package wander
 			{
 				if (FlxG.keys.UP)
 				{
-					velocity.z = WALK_SPEED;
+					ZlxPoint(velocity).z = WALK_SPEED;
 				}
 				else if (FlxG.keys.DOWN)
 				{
-					velocity.z = -WALK_SPEED;
+					ZlxPoint(velocity).z = -WALK_SPEED;
 				}
 				else
 				{
-					velocity.z = 0;
+					ZlxPoint(velocity).z = 0;
 				}
 			}
 			

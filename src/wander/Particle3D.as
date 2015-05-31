@@ -7,9 +7,12 @@ package wander
 	 * ...
 	 * @author zillix
 	 */
-	public class Particle3D extends FlxParticle 
+	public class Particle3D extends GameObject 
 	{
-		public var z:Number = 0;
+		// I've reimplemented the FlxParticle code, since it is more straightforward than reimplementing the 3D code in GameObject.
+		public var lifespan:Number;
+		public var friction:Number;
+		public var scales:Boolean = true;
 		
 		public static var BLOOD:uint = 0xffff00000;
 		public static var GENERIC:uint = 0xff888888;
@@ -20,8 +23,10 @@ package wander
 		{
 			super();
 			makeGraphic(8, 8, c);
+			
+			lifespan = 0;
+			friction = 500;
 		}
-		public var scales:Boolean = true;
 		
 		override public function update():void
 		{
@@ -29,80 +34,56 @@ package wander
 			{
 				kill();
 			}
-		}
-		
-		override public function draw():void
-		{
-			if(_flickerTimer != 0)
-			{
-				_flicker = !_flicker;
-				if(_flicker)
-					return;
-			}
 			
-			if(dirty)	//rarely 
-				calcFrame();
-			
-			//var camera:FlxCamera = FlxG.camera;
-			var camera:Camera3D = PlayState.camera;
-			
-			if (!onScreen(camera) || !visible)
-			{
+			//lifespan behavior
+			if(lifespan <= 0)
 				return;
-			}
+			lifespan -= FlxG.elapsed;
+			if(lifespan <= 0)
+				kill();
 			
-			var perspectiveScale:FlxPoint = new FlxPoint(1, 1);
-			
-			if (z > camera.position.z)
+			//simpler bounce/spin behavior for now
+			if(touching)
 			{
-				var zScale:Number = camera.focalLength / (z - camera.position.z);
-				
-				if (scales)
+				if(angularVelocity != 0)
+					angularVelocity = -angularVelocity;
+			}
+			if(acceleration.y > 0) //special behavior for particles with gravity
+			{
+				if(touching & FLOOR)
 				{
-					perspectiveScale.x = zScale;
-					perspectiveScale.y = perspectiveScale.x;
+					drag.x = friction;
+					
+					if(!(wasTouching & FLOOR))
+					{
+						if(velocity.y < -elasticity*10)
+						{
+							if(angularVelocity != 0)
+								angularVelocity *= -elasticity;
+						}
+						else
+						{
+							velocity.y = 0;
+							angularVelocity = 0;
+						}
+					}
 				}
-				
-				var dX:Number = zScale * (x - camera.position.x);
-				_point.x = dX - int(camera.scroll.x*scrollFactor.x) - offset.x;
-				
-				var dY:Number = zScale * (y - camera.position.y);
-				_point.y = dY - int(camera.scroll.y * scrollFactor.y) - offset.y;
-				
-				_point.x += (_point.x > 0)?0.0000001:-0.0000001;
-				_point.y += (_point.y > 0)?0.0000001: -0.0000001;
-			
-				//Advanced render
-				_matrix.identity();
-				_matrix.translate(-origin.x,-origin.y);
-				_matrix.scale(scale.x * perspectiveScale.x,scale.y * perspectiveScale.y);
-				if((angle != 0) && (_bakedRotation <= 0))
-					_matrix.rotate(angle * 0.017453293);
-				_matrix.translate(_point.x+origin.x,_point.y+origin.y);
-				camera.buffer.draw(framePixels,_matrix,null,blend,null,antialiasing);
-
-				if(FlxG.visualDebug && !ignoreDrawDebug)
-					drawDebug(camera);
+				else
+					drag.x = 0;
 			}
 		}
 		
-		override protected function updateMotion():void
+		public function onEmit():void
 		{
-			super.updateMotion();
-			var delta:Number;
-			var velocityDelta:Number;
-
-			velocityDelta = (FlxU.computeVelocity(velocity.z,acceleration.z,drag.z,maxVelocity.z) - velocity.z)/2;
-			velocity.z += velocityDelta;
-			delta = velocity.z*FlxG.elapsed;
-			velocity.z += velocityDelta;
-			z += delta;
 		}
+		
+		
+		
 		
 		public function reset3D(X:Number,Y:Number,Z:Number):void
 		{
 			z = Z;
-			velocity.z = 0;
+			ZlxPoint(velocity).z = 0;
 			super.reset(X, Y);
 		}
 		
@@ -118,6 +99,8 @@ package wander
 			return z > cam3D.position.z;
 			
 		}
+		
+		
 		
 	}
 	
