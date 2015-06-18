@@ -6,6 +6,8 @@ package wander
 	import org.flixel.system.FlxTile;
 	import org.flixel.system.FlxTilemapBuffer;
 	
+	import wander.utils.*;
+	
 	/**
 	 * ...
 	 * @author zillix
@@ -31,7 +33,7 @@ package wander
 					return;
 			}
 			
-			var camera:Camera3D = PlayState.camera;
+			var camera:Camera3D = Z3DUtils.camera;
 			
 			var perspectiveScale:FlxPoint = new FlxPoint(1, 1);
 			if (z > camera.position.z)

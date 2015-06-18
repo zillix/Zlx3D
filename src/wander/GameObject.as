@@ -3,6 +3,7 @@ package wander
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import org.flixel.*;
+	import wander.utils.*;
 	
 	/**
 	 * ...
@@ -46,7 +47,8 @@ package wander
 		}
 		
 		/**
-		 * Called by game loop, updates then blits or renders current frame of animation to the screen
+		 * Called by game loop, updates then blits or renders current frame of animation to the screen.
+		 * I completely reimplement this, since it needs a lot of custom code.
 		 */
 		override public function draw():void
 		{
@@ -60,8 +62,7 @@ package wander
 			if(dirty)	//rarely 
 				calcFrame();
 			
-			//var camera:FlxCamera = FlxG.camera;
-			var camera:Camera3D = PlayState.camera;
+			var camera:Camera3D = Z3DUtils.camera;
 			
 			if (!onScreen(camera))
 			{
@@ -112,6 +113,7 @@ package wander
 			reset(X, Y);
 		}
 		
+		// Currently this only determines if the object is in *front* of the camera, not truly onnscreen.
 		override public function onScreen(Camera:FlxCamera=null):Boolean
 		{
 			if (Camera as Camera3D)
@@ -120,32 +122,6 @@ package wander
 			}
 			
 			return true;
-			
-		/*	return  super.onScreen(Camera);
-			
-			
-			var camera:Camera3D = PlayState.camera;
-			getScreenXY(_point,camera);
-			_point.x = _point.x - offset.x;
-			_point.y = _point.y - offset.y;
-			
-			if (z < camera.z + camera.focalLength)
-			{
-				return false;
-			}
-
-			if(((angle == 0) || (_bakedRotation > 0)) && (scale.x == 1) && (scale.y == 1))
-				return ((_point.x + frameWidth > 0) && (_point.x < Camera.width) && (_point.y + frameHeight > 0) && (_point.y < Camera.height));
-			
-			var halfWidth:Number = frameWidth/2;
-			var halfHeight:Number = frameHeight/2;
-			var absScaleX:Number = (scale.x>0)?scale.x:-scale.x;
-			var absScaleY:Number = (scale.y>0)?scale.y:-scale.y;
-			var radius:Number = Math.sqrt(halfWidth*halfWidth+halfHeight*halfHeight)*((absScaleX >= absScaleY)?absScaleX:absScaleY);
-			_point.x += halfWidth;
-			_point.y += halfHeight;
-			return ((_point.x + radius > 0) && (_point.x - radius < Camera.width) && (_point.y + radius > 0) && (_point.y - radius < Camera.height));
-	*/
 		}
 		
 		override protected function updateMotion():void
@@ -169,18 +145,20 @@ package wander
 			z += delta;
 		}
 		
-		static public function separate3D(Object1:FlxObject, Object2:FlxObject) : Boolean
+		/*
+		 * Collides two objects along the Z axis
+		 */
+		/*static public function separate3D(Object1:FlxObject, Object2:FlxObject) : Boolean
 		{
-			var separatedX:Boolean = false; // separateX(Object1, Object2);
-			var separatedY:Boolean = false; // separateY(Object1, Object2);
+			var separatedX:Boolean = false; 
+			var separatedY:Boolean = false;
 			var separatedZ:Boolean = false;
 			if ((Object1 is GameObject) && (Object2 is GameObject))
 			{
 				separateZ(Object1 as GameObject, Object2 as GameObject);
 			}
 			return separatedX || separatedY || separatedZ;
-			
-		}
+		}*/
 		
 		static public function collide(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
 		{
@@ -201,13 +179,13 @@ package wander
 					var object:GameObject = obj as GameObject;
 					if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
-						if (source is Player)
+						/*if (source is Player)
 						{
 							if (PlayState.climbOverlap2(source, ((source as Player).touchedObject as Climbable)))
 							{
 								return false;
 							}
-						}
+						}*/
 						
 						if (ProcessCallback(source, object))
 						{
@@ -492,7 +470,10 @@ package wander
 				emit.add(gib);
 				gib.scale = new FlxPoint(2, 2);
 			}
-			PlayState.instance.objects.add(emit);
+			
+			// TODO(alex): Get this to work in a non-static way
+			//PlayState.instance.objects.add(emit);
+			
 			emit.beginEmit(true, 2, .07, 0, 2);
 			play("dead");
 			annihilated = true;

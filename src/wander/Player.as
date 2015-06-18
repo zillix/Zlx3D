@@ -9,13 +9,13 @@ package wander
 	import org.flixel.*;
 	public class Player extends GameObject 
 	{
-		private static var WALK_SPEED:int = 190;
+		private static const WALK_SPEED:int = 190;
 		private static const JUMP_SPEED:int = 400;
-		public var GROUND_HEIGHT:int = 0;
+		
 		
 		public static const HEIGHT:int = 50;
 		
-		public static var AUTOGRAB_SPEED:Number = 100;
+		public static const AUTOGRAB_SPEED:Number = 100;
 		
 		
 		public static const CLIMB_SPEED:int = 150;
@@ -83,17 +83,17 @@ package wander
 			
 			
 			if (velocity.y > 0
-				&& y + velocity.y * FlxG.elapsed > GROUND_HEIGHT)
+				&& y + velocity.y * FlxG.elapsed > Zlx3DConfig.GROUND_HEIGHT)
 			{
 				isClimbing = false;
 				_jumped = false;
 				acceleration.y = 0;
 				velocity.y = 0;
-				y = PlayState.GROUND_HEIGHT;
+				y = Zlx3DConfig.GROUND_HEIGHT;
 			}
 			if (!isClimbing && y < 0)
 			{
-				acceleration.y = PlayState.GRAVITY;
+				acceleration.y = Zlx3DConfig.GRAVITY;
 			}
 			
 			if (isClimbing)
@@ -137,7 +137,7 @@ package wander
 					velocity.y = 0;
 				}
 			}
-			else if ((y == PlayState.GROUND_HEIGHT || (//!couldClimb && 
+			else if ((y == Zlx3DConfig.GROUND_HEIGHT || (//!couldClimb && 
 				!touchedObject)))
 			{
 				if (FlxG.keys.UP)

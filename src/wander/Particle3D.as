@@ -30,7 +30,7 @@ package wander
 		
 		override public function update():void
 		{
-			if (y > PlayState.GROUND_HEIGHT)
+			if (y > Zlx3DConfig.GROUND_HEIGHT)
 			{
 				kill();
 			}
