@@ -32,17 +32,9 @@ package wander
 		{
 			super(X, Y, Z);
 			makeGraphic(HEIGHT, HEIGHT, 0xffffff00);
-			setOffsets();
 			immovable = false;
-			//acceleration.y = GRAVITY;
 		}
 		
-		/*public function set couldClimb(bool:Boolean):void
-		{
-			_couldClimb = bool;
-		}
-		public function get couldClimb():Boolean { return _couldClimb; }
-		*/
 		public function resetTouchedObject():void
 		{
 			if (!isClimbing)
@@ -61,9 +53,6 @@ package wander
 		
 		public override function update():void
 		{
-			
-			
-			
 			// TODO(alex): This should be tracked by the camera
 			if (ZlxPoint(velocity).z < 0)
 			{

@@ -9,6 +9,7 @@ package wander.demos
 	import wander.ZlxPoint;
 	import wander.GameObject;
 	
+	import wander.demos.*;
 	import wander.utils.*;
 	
 	/**
@@ -167,19 +168,15 @@ package wander.demos
 				case JUNK:
 					gameObject = new GameObject(xPos, 0, zPos);
 					gameObject.makeGraphic(Math.random() * 100 + 70, Math.random() * 100 + 50, 0xff00ff00);
-					gameObject.setOffsets();
 					break;
 					
 				case PILLAR:
 					gameObject = new GameObject(xPos, 0, zPos);
 					gameObject.makeGraphic(1000, 5000, 0xffff0000);
-					gameObject.setOffsets();
 					break;
 					
 				case CLIMBABLE:
-					gameObject = new Climbable(xPos, 0, zPos, _objects);
-					gameObject.makeGraphic(200, 400, 0xff0000ff);
-					gameObject.setOffsets();
+					gameObject = new DemoClimbable(xPos, 0, zPos, _objects);
 					break;
 			}
 			

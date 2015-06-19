@@ -34,16 +34,41 @@ package wander
 			z = Z;
 			immovable = true;
 			maxVelocity = new ZlxPoint(1000, 1000, 1000);
+			
+			setOffsets();
 		}
 		
 		
-		
+		// This is important, must be called after the dimensions of the object
+		// are established.
+		// loadGraphic, loadRotatedGraphic and makeGraphic already use it automatically.
 		public function setOffsets():void
 		{
 			offset.x = width / 2;
 			offset.y = height;
-			origin.y = height;
 			origin.x = width / 2;
+			origin.y = height;
+		}
+		
+		override public function loadGraphic(Graphic:Class,Animated:Boolean=false,Reverse:Boolean=false,Width:uint=0,Height:uint=0,Unique:Boolean=false):FlxSprite
+		{
+			var returnValue:FlxSprite = super.loadGraphic(Graphic, Animated, Reverse, Width, Height, Unique);
+			setOffsets();
+			return returnValue;
+		}
+		
+		override public function loadRotatedGraphic(Graphic:Class, Rotations:uint=16, Frame:int=-1, AntiAliasing:Boolean=false, AutoBuffer:Boolean=false, Scale:Number = 1.0):FlxSprite
+		{
+			var returnValue:FlxSprite = super.loadRotatedGraphic(Graphic, Rotations, Frame, AntiAliasing, AutoBuffer, Scale);
+			setOffsets();
+			return returnValue;
+		}
+		
+		override public function makeGraphic(Width:uint,Height:uint,Color:uint=0xffffffff,Unique:Boolean=false,Key:String=null):FlxSprite
+		{
+			var returnValue:FlxSprite = super.makeGraphic(Width, Height, Color, Unique, Key);
+			setOffsets();
+			return returnValue;
 		}
 		
 		/**
@@ -356,32 +381,8 @@ package wander
 				if((obj1rect.x + obj1rect.width > obj2rect.x) && (obj1rect.x < obj2rect.x + obj2rect.width) && (obj1rect.y + obj1rect.height > obj2rect.y) && (obj1rect.y < obj2rect.y + obj2rect.height))
 				{
 					overlap = 1;
-					/*var maxOverlap:Number = obj1deltaAbs + obj2deltaAbs + OVERLAP_BIAS;
 					
-					//If they did overlap (and can), figure out by how much and flip the corresponding flags
-					if(obj1delta > obj2delta)
-					{
-						overlap = obj1Pos.z + Object1.depth - obj2Pos.z;
-					
-						if(overlap > maxOverlap)
-							overlap = 0;
-						else
-						{
-							Object1.touching |= DOWN;
-							Object2.touching |= UP;
-						}
-					}
-					else if(obj1delta < obj2delta)
-					{
-						overlap = obj1Pos.z - obj2Pos.z - Object2.depth;
-						if(-overlap > maxOverlap)
-							overlap = 0;
-						else
-						{
-							Object1.touching |= UP;
-							Object2.touching |= DOWN;
-						}
-					}*/
+					// Does not set any 'touching' flags on either object
 				}
 			}
 			
@@ -390,22 +391,22 @@ package wander
 		
 		public function get left():Number
 		{
-			return x /*- (offset.x * scale.x)*/ - width / 2 * scale.x;; 
+			return x - width / 2 * scale.x;; 
 		}
 		
 		public function get right():Number
 		{
-			return x /*+ (offset.x * scale.x)*/ + width/ 2 * scale.x; 
+			return x + width/ 2 * scale.x; 
 		}
 		
 		public function get top():Number
 		{
-			return y /*- (offset.y * scale.y)*/ - height * scale.y; 
+			return y - height * scale.y; 
 		}
 		
 		public function get bottom():Number
 		{
-			return y /*+ (offset.y * scale.y)*//* + height/2 * scale.y*/; 
+			return y ; 
 		}
 		
 		public function moveTowards(point:ZlxPoint, speed:Number, threshold:Number):Boolean
@@ -448,35 +449,6 @@ package wander
 			}
 			
 			return false;
-		}
-		
-		public function annihilate(color:uint = 0):void
-		{
-			if (color == 0)
-			{
-				color = Particle3D.GENERIC;
-			}
-			
-			var numParticles:int = 30;
-			var PARTICLE_GRAVITY:Number = 200;
-			var emit:Emitter3D = new Emitter3D(x, y, z, numParticles);
-			emit.particleDrag = new FlxPoint(10, 10);
-			emit.gravity = PARTICLE_GRAVITY;
-			emit.setXSpeed( -200, 200);
-			emit.setYSpeed( -300, -50);
-			var gib:Particle3D;
-			for (var i:int = 0; i < numParticles; i++) {
-				gib = new Particle3D(color);
-				emit.add(gib);
-				gib.scale = new FlxPoint(2, 2);
-			}
-			
-			// TODO(alex): Get this to work in a non-static way
-			//PlayState.instance.objects.add(emit);
-			
-			emit.beginEmit(true, 2, .07, 0, 2);
-			play("dead");
-			annihilated = true;
 		}
 	}
 	

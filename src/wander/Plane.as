@@ -29,7 +29,6 @@ package wander
 			if(dirty)	//rarely 
 				calcFrame();
 			
-			//var camera:FlxCamera = FlxG.camera;
 			var camera:Camera3D = PlayState.camera;
 			
 			if (!onScreen(camera))

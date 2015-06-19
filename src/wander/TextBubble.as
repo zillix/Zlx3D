@@ -24,7 +24,6 @@ package wander
 			parentOffsets = new FlxPoint(X - parent.x, Y - parent.y, Z - parent.z);
 			background = new GameObject(X, Y, Z);
 			background.makeGraphic(100, 50, 0xff999999);
-			background.setOffsets();
 			background.scales = false;
 			
 			text3D = new Text3D(X, Y, Z, 100, txt, true, false);

@@ -9,7 +9,8 @@ package wander
 	 */
 	public class Particle3D extends GameObject 
 	{
-		// I've reimplemented the FlxParticle code, since it is more straightforward than reimplementing the 3D code in GameObject.
+		// I've reimplemented the FlxParticle code, 
+		// since it is more straightforward than reimplementing the 3D code from GameObject.
 		public var lifespan:Number;
 		public var friction:Number;
 		public var scales:Boolean = true;
@@ -77,31 +78,13 @@ package wander
 		{
 		}
 		
-		
-		
-		
+		// Need to create a new function to support the Z parameter
 		public function reset3D(X:Number,Y:Number,Z:Number):void
 		{
 			z = Z;
 			ZlxPoint(velocity).z = 0;
 			super.reset(X, Y);
 		}
-		
-		
-		public override function onScreen(camera:FlxCamera = null):Boolean
-		{
-			var cam3D:Camera3D = camera as Camera3D;
-			if (!(camera is Camera3D))
-			{
-				return false;
-			}
-			
-			return z > cam3D.position.z;
-			
-		}
-		
-		
-		
 	}
 	
 }
