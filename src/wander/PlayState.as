@@ -13,8 +13,6 @@ package wander
 
 	public class PlayState extends FlxState
 	{
-		public static var instance:PlayState;
-		
 		private var _activeDemo:Zlx3DDemo;
 		private var _demoText:FlxText;
 		
@@ -22,7 +20,6 @@ package wander
 		
 		override public function create():void
 		{
-			instance = this;
 			FlxG.bgColor = 0xffffffff;
 			
 			_demoText = new FlxText(50, 30, 200,

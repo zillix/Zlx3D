@@ -10,14 +10,14 @@ package wander
 	 * @author zillix
 	 */
 	
-	public class TextBubble extends Animation3D 
+	public class TextBubble extends FlxGroup 
 	{
 		public var background:GameObject;
 		public var parent:GameObject;
 		public var parentOffsets:FlxPoint;
 		public var text3D:Text3D;
 		
-		public function TextBubble(X:Number = 0, Y:Number = 0, Z:Number = 0, txt:String = "", par:GameObject = null)
+		public function TextBubble(X:Number, Y:Number, Z:Number, txt:String, parent:GameObject, parentObjectLayer:FlxGroup, parentTextLayer:FlxGroup)
 		{
 			super();
 			parent = par;
@@ -28,9 +28,8 @@ package wander
 			
 			text3D = new Text3D(X, Y, Z, 100, txt, true, false);
 			
-			PlayState.instance.objects.add(background);
-			
-			PlayState.instance.texts.add(text3D);
+			parentLayer.add(background);
+			parentTextLayer.add(text3D);
 		}
 		
 		public override function update():void

@@ -170,21 +170,6 @@ package wander
 			z += delta;
 		}
 		
-		/*
-		 * Collides two objects along the Z axis
-		 */
-		/*static public function separate3D(Object1:FlxObject, Object2:FlxObject) : Boolean
-		{
-			var separatedX:Boolean = false; 
-			var separatedY:Boolean = false;
-			var separatedZ:Boolean = false;
-			if ((Object1 is GameObject) && (Object2 is GameObject))
-			{
-				separateZ(Object1 as GameObject, Object2 as GameObject);
-			}
-			return separatedX || separatedY || separatedZ;
-		}*/
-		
 		static public function collide(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
 		{
 			return overlap(source, group, NotifyCallback, separateZ);
@@ -204,14 +189,6 @@ package wander
 					var object:GameObject = obj as GameObject;
 					if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
-						/*if (source is Player)
-						{
-							if (PlayState.climbOverlap2(source, ((source as Player).touchedObject as Climbable)))
-							{
-								return false;
-							}
-						}*/
-						
 						if (ProcessCallback(source, object))
 						{
 							if (NotifyCallback != null)
