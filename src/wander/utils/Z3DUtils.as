@@ -5,7 +5,7 @@ package wander.utils
 	import org.flixel.system.*;
 	import wander.Camera3D;
 	import wander.Climbable;
-	import wander.ZlxObject;
+	import wander.ZlxSprite;
 	import wander.Tilemap3D;
 	
 	/**
@@ -43,7 +43,7 @@ package wander.utils
 			return result;
 		}
 		
-		public static function fitObjectInsideBounds(gameObject:ZlxObject, bounds:Rectangle):void
+		public static function fitObjectInsideBounds(gameObject:ZlxSprite, bounds:Rectangle):void
 		{
 			var direction:int = 0;
 			if (gameObject.x < bounds.x)

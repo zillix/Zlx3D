@@ -1,13 +1,13 @@
 package wander
 {
 	import org.flixel.FlxPoint;
-	import wander.ZlxObject;
+	import wander.ZlxSprite;
 	
 	/**
 	 * ...
 	 * @author zillix
 	 */
-	public class Plane extends ZlxObject 
+	public class Plane extends ZlxSprite 
 	{
 		public var rotation:FlxPoint;
 		
