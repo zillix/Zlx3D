@@ -7,7 +7,7 @@ package wander.demos
 	import wander.Climbable;
 	import wander.Player;
 	import wander.ZlxPoint;
-	import wander.GameObject;
+	import wander.ZlxObject;
 	
 	import wander.demos.*;
 	import wander.utils.*;
@@ -51,7 +51,7 @@ package wander.demos
 			
 			loadMapImage(MapImage);
 			
-				var junk:GameObject;
+				var junk:ZlxObject;
 		/*	for (var i:int = 0; i < 20; i++)
 			{
 				junk = new GameObject(Math.random() * 1000 - 500, 0, Math.random() * 10000 + 1000);
@@ -104,11 +104,11 @@ package wander.demos
 			}
 			else
 			{
-				GameObject.collide(_player, _objects, onPlayerTouchObject);
+				ZlxObject.collide(_player, _objects, onPlayerTouchObject);
 			}
 		}
 		
-		private function onPlayerTouchObject(src:Player, hit:GameObject):void
+		private function onPlayerTouchObject(src:Player, hit:ZlxObject):void
 		{
 			src.setTouchedObject(hit);
 		}
@@ -162,16 +162,16 @@ package wander.demos
 			
 			var xPos:int = MAP_SCALE * (column - width / 2);
 			var zPos:int = MAP_SCALE * (height - row);
-			var gameObject:GameObject;
+			var gameObject:ZlxObject;
 			switch(pixel)
 			{
 				case JUNK:
-					gameObject = new GameObject(xPos, 0, zPos);
+					gameObject = new ZlxObject(xPos, 0, zPos);
 					gameObject.makeGraphic(Math.random() * 100 + 70, Math.random() * 100 + 50, 0xff00ff00);
 					break;
 					
 				case PILLAR:
-					gameObject = new GameObject(xPos, 0, zPos);
+					gameObject = new ZlxObject(xPos, 0, zPos);
 					gameObject.makeGraphic(1000, 5000, 0xffff0000);
 					break;
 					

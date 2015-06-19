@@ -9,7 +9,7 @@ package wander
 	 * ...
 	 * @author zillix
 	 */
-	public class GameObject extends FlxSprite 
+	public class ZlxObject extends FlxSprite 
 	{
 		public var z:Number;
 		public var depth:Number = 10;
@@ -18,7 +18,7 @@ package wander
 		public var shadow:Boolean = false;
 		public var annihilated:Boolean = false;
 		
-		public function GameObject(X:Number = 0, Y:Number = 0, Z:Number = 0)
+		public function ZlxObject(X:Number = 0, Y:Number = 0, Z:Number = 0)
 		{
 			super(X, Y);
 			
@@ -170,12 +170,12 @@ package wander
 			z += delta;
 		}
 		
-		static public function collide(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
+		static public function collide(source:ZlxObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
 		{
 			return overlap(source, group, NotifyCallback, separateZ);
 		}
 		
-		static public function overlap(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null, ProcessCallback:Function =null):Boolean
+		static public function overlap(source:ZlxObject=null, group:FlxGroup=null, NotifyCallback:Function=null, ProcessCallback:Function =null):Boolean
 		{
 			for each (var obj:FlxBasic in group.members)
 			{
@@ -184,9 +184,9 @@ package wander
 					continue;
 				}
 				
-				if (obj is GameObject)
+				if (obj is ZlxObject)
 				{
-					var object:GameObject = obj as GameObject;
+					var object:ZlxObject = obj as ZlxObject;
 					if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
 						if (ProcessCallback(source, object))
@@ -205,7 +205,7 @@ package wander
 			return false;
 		}
 		
-		static public function shadowCollide(source:GameObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
+		static public function shadowCollide(source:ZlxObject=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
 		{
 			for each (var obj:FlxBasic in group.members)
 			{
@@ -214,9 +214,9 @@ package wander
 					continue;
 				}
 				
-				if (obj is GameObject)
+				if (obj is ZlxObject)
 				{
-					var object:GameObject = obj as GameObject;
+					var object:ZlxObject = obj as ZlxObject;
 					//if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
 						if (collideZ(source, object))
@@ -239,7 +239,7 @@ package wander
 		 * 
 		 * @return	Whether the objects in fact touched and were separated along the Z axis.
 		 */
-		static public function separateZ(Object1:GameObject, Object2:GameObject):Boolean
+		static public function separateZ(Object1:ZlxObject, Object2:ZlxObject):Boolean
 		{
 			//can't separate two immovable objects
 			var obj1immovable:Boolean = Object1.immovable;
@@ -343,7 +343,7 @@ package wander
 				return false;
 		}
 		
-		static public function collideZ(Object1:GameObject, Object2:GameObject):Boolean
+		static public function collideZ(Object1:ZlxObject, Object2:ZlxObject):Boolean
 		{
 			var obj1Pos:ZlxPoint = new ZlxPoint(Object1.x - Object1.offset.x, Object1.y - Object1.offset.y, Object1.z - ZlxPoint(Object1.offset).z);
 			var obj2Pos:ZlxPoint = new ZlxPoint(Object2.x - Object2.offset.x, Object2.y - Object2.offset.y, Object2.z - ZlxPoint(Object2.offset).z);

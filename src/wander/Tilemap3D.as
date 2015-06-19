@@ -69,79 +69,8 @@ package wander
 				matrix.scale(zScale, zScale);
 				matrix.translate(_flashPoint.x + origin.x, _flashPoint.y + origin.y);
 				camera.buffer.draw(buffer.pixels, matrix);
-				//buffer.draw(camera,_flashPoint);
-				//_VISIBLECOUNT++;
 			}
 		}
-		
-		/*override protected function drawTilemap(Buffer:FlxTilemapBuffer,Camera:FlxCamera):void
-		{
-			Buffer.fill();
-			
-			var zScale:Number = camera.focalLength / (z - camera.position.z);
-				
-			//Copy tile images into the tile buffer
-			_point.x = int(Camera.scroll.x*scrollFactor.x) - x; //modified from getScreenXY()
-			_point.y = int(Camera.scroll.y*scrollFactor.y) - y;
-			var screenXInTiles:int = (_point.x + ((_point.x > 0)?0.0000001:-0.0000001))/_tileWidth;
-			var screenYInTiles:int = (_point.y + ((_point.y > 0)?0.0000001:-0.0000001))/_tileHeight;
-			var screenRows:uint = Buffer.rows;
-			var screenColumns:uint = Buffer.columns;
-			
-			//Bound the upper left corner
-			if(screenXInTiles < 0)
-				screenXInTiles = 0;
-			if(screenXInTiles > widthInTiles-screenColumns)
-				screenXInTiles = widthInTiles-screenColumns;
-			if(screenYInTiles < 0)
-				screenYInTiles = 0;
-			if(screenYInTiles > heightInTiles-screenRows)
-				screenYInTiles = heightInTiles-screenRows;
-			
-			var rowIndex:int = screenYInTiles*widthInTiles+screenXInTiles;
-			_flashPoint.y = 0;
-			var row:uint = 0;
-			var column:uint;
-			var columnIndex:uint;
-			var tile:FlxTile;
-			var debugTile:BitmapData;
-			while(row < screenRows)
-			{
-				columnIndex = rowIndex;
-				column = 0;
-				_flashPoint.x = 0;
-				while(column < screenColumns)
-				{
-					_flashRect = _rects[columnIndex] as Rectangle;
-					if(_flashRect != null)
-					{
-						Buffer.pixels.copyPixels(_tiles,_flashRect,_flashPoint,null,null,true);
-						if(FlxG.visualDebug && !ignoreDrawDebug)
-						{
-							tile = _tileObjects[_data[columnIndex]];
-							if(tile != null)
-							{
-								if(tile.allowCollisions <= NONE)
-									debugTile = _debugTileNotSolid; //blue
-								else if(tile.allowCollisions != ANY)
-									debugTile = _debugTilePartial; //pink
-								else
-									debugTile = _debugTileSolid; //green
-								Buffer.pixels.copyPixels(debugTile,_debugRect,_flashPoint,null,null,true);
-							}
-						}
-					}
-					_flashPoint.x += _tileWidth;
-					column++;
-					columnIndex++;
-				}
-				rowIndex += widthInTiles;
-				_flashPoint.y += _tileHeight;
-				row++;
-			}
-			Buffer.x = screenXInTiles*_tileWidth;
-			Buffer.y = screenYInTiles*_tileHeight;
-		}*/
 	}
 	
 }

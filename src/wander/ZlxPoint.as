@@ -3,7 +3,7 @@ package wander
 	import org.flixel.FlxPoint;
 	
 	/**
-	 * ...
+	 * Simple point that supports a Z value.
 	 * @author zillix
 	 */
 	public class ZlxPoint extends FlxPoint 

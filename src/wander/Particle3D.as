@@ -7,7 +7,7 @@ package wander
 	 * ...
 	 * @author zillix
 	 */
-	public class Particle3D extends GameObject 
+	public class Particle3D extends ZlxObject 
 	{
 		// I've reimplemented the FlxParticle code, 
 		// since it is more straightforward than reimplementing the 3D code from GameObject.

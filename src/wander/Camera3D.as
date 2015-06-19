@@ -22,7 +22,7 @@ package wander
 		public var position:ZlxPoint;
 		
 		public var followDist:ZlxPoint;
-		public var followTarget:GameObject;
+		public var followTarget:ZlxObject;
 		public var followSpeed:ZlxPoint;
 		
 		public var deadDist:ZlxPoint;
@@ -206,9 +206,9 @@ package wander
 		
 		
 		
-		public function startScan(object:GameObject):void
+		public function startScan(object:ZlxObject):void
 		{
-			var oldTarget:GameObject = followTarget;
+			var oldTarget:ZlxObject = followTarget;
 			var oldFollowDist:ZlxPoint = followDist;
 			followTarget = object;
 			
@@ -226,9 +226,9 @@ package wander
 			}
 		}
 		
-			public function idleScan(object:GameObject):void
+			public function idleScan(object:ZlxObject):void
 		{
-			var oldTarget:GameObject = followTarget;
+			var oldTarget:ZlxObject = followTarget;
 			var oldFollowDist:ZlxPoint = followDist;
 			followTarget = object;
 			
@@ -246,9 +246,9 @@ package wander
 			}
 		}
 		
-		public function endScan(object:GameObject, callback:Function = null):void
+		public function endScan(object:ZlxObject, callback:Function = null):void
 		{
-			var oldTarget:GameObject = followTarget;
+			var oldTarget:ZlxObject = followTarget;
 			var oldFollowDist:FlxPoint = followDist;
 			followTarget = object;
 			

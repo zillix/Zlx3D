@@ -6,7 +6,7 @@ package wander
 	 * ...
 	 * @author zillix
 	 */
-	public class Climbable extends GameObject 
+	public class Climbable extends ZlxObject 
 	{
 		[Embed(source = "data/climbTiles.png")]	public var AutoTiles:Class;
 		

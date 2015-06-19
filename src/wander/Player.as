@@ -7,7 +7,7 @@ package wander
 	 */
 	
 	import org.flixel.*;
-	public class Player extends GameObject 
+	public class Player extends ZlxObject 
 	{
 		private static const WALK_SPEED:int = 190;
 		private static const JUMP_SPEED:int = 400;
@@ -43,7 +43,7 @@ package wander
 			}
 		}
 		
-		public function setTouchedObject(obj:GameObject):void
+		public function setTouchedObject(obj:ZlxObject):void
 		{
 			if (!isClimbing)
 			{
