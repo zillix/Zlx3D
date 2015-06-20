@@ -19,6 +19,8 @@ package wander
 		{
 			super(X, Y, Z);
 			
+			immovable = true;
+			
 			if (ClimbClass == null)
 			{
 				trace("Failed to initialize Climbable!");

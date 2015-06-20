@@ -23,29 +23,37 @@ package wander.demos
 		{
 			super.update();
 			
-			if (_player.isClimbing && (_player.touchedObject is Climbable))
+			if (DemoClimbingPlayer(_player).isClimbing && 
+				(_player.touchedObject is Climbable))
 			{
 				Z3D.climbOverlap(_player, (_player.touchedObject as Climbable), FlxObject.separate);
 			}
 		}
 		
+		override protected function initPlayer() : DemoPlayer
+		{
+			return new DemoClimbingPlayer();
+		}
+		
 		private static const JUNK:uint = 0x1EDA02; // 30,218,2 (green)
 		private static const PILLAR:uint = 0x572F17; // 87 47 23 (brown)
 		private static const CLIMBABLE:uint = 0x1B02DA; // 27 2 218 (blue)
-		override public function handleMapPixelColor(color:uint) : ZlxSprite
+		override protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : ZlxSprite
 		{
 			var gameObject:ZlxSprite;
-			switch(pixel)
+			switch(color)
 			{
 
 				case JUNK:
 					gameObject = new ZlxSprite(xPos, 0, zPos);
 					gameObject.makeGraphic(Math.random() * 100 + 70, Math.random() * 100 + 50, 0xff00ff00);
+					gameObject.immovable = true;
 					break;
 					
 				case PILLAR:
 					gameObject = new ZlxSprite(xPos, 0, zPos);
 					gameObject.makeGraphic(1000, 5000, 0xffff0000);
+					gameObject.immovable = true;
 					break;
 					
 				case CLIMBABLE:

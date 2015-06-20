@@ -5,7 +5,6 @@ package wander.demos
 	import org.flixel.*;
 	import wander.Camera3D;
 	import wander.Climbable;
-	import wander.Player;
 	import wander.ZlxPoint;
 	import wander.ZlxSprite;
 	
@@ -19,7 +18,7 @@ package wander.demos
 	 */
 	public class Zlx3DDemo extends FlxGroup 
 	{
-		protected var _player:Player;
+		protected var _player:DemoPlayer;
 		protected var _background:FlxSprite;
 		protected var _objects:FlxGroup;
 		protected var _bounds:Rectangle;
@@ -37,7 +36,7 @@ package wander.demos
 			_objects = new FlxGroup();
 			add(_objects);
 			
-			_player = new Player();
+			_player = initPlayer();
 			_objects.add(_player);
 			
 			// Set up the 3D camera
@@ -95,17 +94,15 @@ package wander.demos
 			
 			_player.resetTouchedObject();
 			
-			if (_player.isClimbing && (_player.touchedObject is Climbable))
-			{
-				//Zlx3DUtils.climbOverlap(_player, (_player.touchedObject as Climbable), FlxObject.separate);
-			}
-			else
-			{
-				ZlxSprite.collide(_player, _objects, onPlayerTouchObject);
-			}
+			ZlxSprite.collide(_player, _objects, onPlayerTouchObject);
 		}
 		
-		private function onPlayerTouchObject(src:Player, hit:ZlxSprite):void
+		protected function initPlayer() : DemoPlayer
+		{
+			return new DemoPlayer();
+		}
+		
+		private function onPlayerTouchObject(src:DemoPlayer, hit:ZlxSprite):void
 		{
 			src.setTouchedObject(hit);
 		}
@@ -154,11 +151,12 @@ package wander.demos
 				return;
 			}
 			
+			// Assume the map lies in the X/Z plane
 			var xPos:int = MAP_SCALE * (column - width / 2);
 			var zPos:int = MAP_SCALE * (height - row);
 			var gameObject:ZlxSprite;
 			
-			gameObject = handleMapPixelColor(pixel);
+			gameObject = handleMapPixelColor(pixel, xPos, zPos);
 			
 			if (gameObject != null)
 			{
@@ -167,7 +165,7 @@ package wander.demos
 		}
 		
 		// To be overridden by child demo classes
-		protected function handleMapPixelColor(color:uint) : ZlxSprite
+		protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : ZlxSprite
 		{
 			return null;
 		}

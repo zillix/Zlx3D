@@ -30,7 +30,6 @@ package wander
 			maxVelocity = new ZlxPoint(10000,10000);
 			
 			z = Z;
-			immovable = true;
 			maxVelocity = new ZlxPoint(1000, 1000, 1000);
 			
 			setOffsets();
