@@ -9,7 +9,8 @@ package wander
 	import wander.utils.*;
 	
 	/**
-	 * ...
+	 * A tilemap that supports scaled renderering based on z distance.
+	 * It is expected to be a rectangular plane that exists along the X/Y axes.
 	 * @author zillix
 	 */
 	public class Tilemap3D extends FlxTilemap 
@@ -33,7 +34,7 @@ package wander
 					return;
 			}
 			
-			var camera:Camera3D = Z3DUtils.camera;
+			var camera:Camera3D = Z3D.camera;
 			
 			var perspectiveScale:FlxPoint = new FlxPoint(1, 1);
 			if (z > camera.position.z)

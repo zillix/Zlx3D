@@ -4,7 +4,10 @@ package wander
 	import wander.ZlxSprite;
 	
 	/**
-	 * ...
+	 * A horizontal plane, parallel to the ground.
+	 * Does not support rotation.
+	 * Does not support distance tapering (will always have a rectangle shape).
+	 * 
 	 * @author zillix
 	 */
 	public class Plane extends ZlxSprite 

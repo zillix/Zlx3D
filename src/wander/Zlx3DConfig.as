@@ -4,6 +4,7 @@ package wander
 	/**
 	 * Basic constants for the 3d world.
 	 * Feel free to override these as necessary.
+	 * @author zillix
 	 */
 	public class Zlx3DConfig 
 	{

@@ -13,8 +13,9 @@ package wander.demos
 	import wander.utils.*;
 	
 	/**
-	 * ...
-	 * @author ...
+	 * Minimum impelmentation of a demo.
+	 * Each demo child class will show off some Zlx3D functionality.
+	 * @author zillix
 	 */
 	public class Zlx3DDemo extends FlxGroup 
 	{
@@ -22,8 +23,6 @@ package wander.demos
 		protected var _background:FlxSprite;
 		protected var _objects:FlxGroup;
 		protected var _bounds:Rectangle;
-		
-		[Embed(source = "data/map.png")]	public var MapImage:Class;
 		
 		public function Zlx3DDemo()
 		{
@@ -48,8 +47,6 @@ package wander.demos
 			camera.followTarget = _player;
 			camera.followDist = new ZlxPoint(0, -100, -camera.focalLength);
 			FlxG.resetCameras(camera);
-			
-			loadMapImage(MapImage);
 			
 				var junk:ZlxSprite;
 		/*	for (var i:int = 0; i < 20; i++)
@@ -150,9 +147,6 @@ package wander.demos
 		
 		private static const MAP_SCALE:int = 100;
 		private static const WHITE:uint = 0xffffff;
-		private static const JUNK:uint = 0x1EDA02; // 30,218,2 (green)
-		private static const PILLAR:uint = 0x572F17; // 87 47 23 (brown)
-		private static const CLIMBABLE:uint = 0x1B02DA; // 27 2 218 (blue)
 		private function handleMapPixel(pixel:uint, column:uint, row:uint, width:uint, height:uint):void
 		{
 			if (pixel == WHITE)
@@ -163,27 +157,19 @@ package wander.demos
 			var xPos:int = MAP_SCALE * (column - width / 2);
 			var zPos:int = MAP_SCALE * (height - row);
 			var gameObject:ZlxSprite;
-			switch(pixel)
-			{
-				case JUNK:
-					gameObject = new ZlxSprite(xPos, 0, zPos);
-					gameObject.makeGraphic(Math.random() * 100 + 70, Math.random() * 100 + 50, 0xff00ff00);
-					break;
-					
-				case PILLAR:
-					gameObject = new ZlxSprite(xPos, 0, zPos);
-					gameObject.makeGraphic(1000, 5000, 0xffff0000);
-					break;
-					
-				case CLIMBABLE:
-					gameObject = new DemoClimbable(xPos, 0, zPos, _objects);
-					break;
-			}
+			
+			gameObject = handleMapPixelColor(pixel);
 			
 			if (gameObject != null)
 			{
 				_objects.add(gameObject);
 			}
+		}
+		
+		// To be overridden by child demo classes
+		protected function handleMapPixelColor(color:uint) : ZlxSprite
+		{
+			return null;
 		}
 		
 		public function cleanUp() : void

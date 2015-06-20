@@ -7,16 +7,14 @@ package wander
 	
 	/**
 	 * 3D implementation of FlxSprite.
+	 * Most of the work is just overriding FlxSprite functions to support a Z axis.
 	 * @author zillix
 	 */
 	public class ZlxSprite extends FlxSprite 
 	{
 		public var z:Number;
-		public var depth:Number = 10;
+		public var depth:Number = 10; // Length along the z axis.
 		public static var Z_DIST_CHECK:int = 200;
-		
-		public var shadow:Boolean = false;
-		public var annihilated:Boolean = false;
 		
 		public function ZlxSprite(X:Number = 0, Y:Number = 0, Z:Number = 0)
 		{
@@ -87,7 +85,7 @@ package wander
 			if(dirty)	//rarely 
 				calcFrame();
 			
-			var camera:Camera3D = Z3DUtils.camera;
+			var camera:Camera3D = Z3D.camera;
 			
 			if (!onScreen(camera))
 			{

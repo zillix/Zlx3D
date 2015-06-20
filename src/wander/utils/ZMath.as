@@ -2,10 +2,10 @@ package wander.utils
 {
 	
 	/**
-	 * ...
+	 * Generic math utils. Shared between my other libraries.
 	 * @author zillix
 	 */
-	public class MathUtils 
+	public class ZMath 
 	{
 		public static function degreesToRadians(degrees:Number) : Number
 		{

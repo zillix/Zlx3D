@@ -20,6 +20,7 @@ package wander
 		
 		public static const CLIMB_SPEED:int = 150;
 		
+		// TODO(alex): Move climbing functionalty to GameObject
 		public var touchedObject:Object;
 		public var isClimbing:Boolean = false;
 		

@@ -9,10 +9,10 @@ package wander.utils
 	import wander.Tilemap3D;
 	
 	/**
-	 * ...
-	 * @author ...
+	 * Various 3D utility functions needed by Zlx3D.
+	 * @author zillix
 	 */
-	public class Z3DUtils 
+	public class Z3D 
 	{
 		
 		public static function climbOverlap(object1:FlxSprite = null, climbable:Climbable = null, NotifyCallback:Function = null, ProcessCallback:Function = null):Boolean

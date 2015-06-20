@@ -4,13 +4,12 @@ package wander
 	import org.flixel.*;
 	
 	/**
-	 * ...
+	 * A reimplemenation of FlxParticle, that extends ZlxSprite.
+	 *
 	 * @author zillix
 	 */
 	public class Particle3D extends ZlxSprite 
 	{
-		// I've reimplemented the FlxParticle code, 
-		// since it is more straightforward than reimplementing the 3D code from GameObject.
 		public var lifespan:Number;
 		public var friction:Number;
 		public var scales:Boolean = true;

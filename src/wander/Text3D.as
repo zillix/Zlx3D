@@ -3,7 +3,7 @@ package wander
 	import org.flixel.*;
 	
 	/**
-	 * ...
+	 * TODO(alex)
 	 * @author zillix
 	 */
 	public class Text3D extends FlxText

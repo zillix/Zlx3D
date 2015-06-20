@@ -3,8 +3,8 @@ package wander.demos
 	import org.flixel.FlxGroup;
 	import wander.Climbable;
 	/**
-	 * ...
-	 * @author ...
+	 * Demo climbable object with a demo climbMap.
+	 * @author zillix
 	 */
 	public class DemoClimbable extends Climbable
 	{

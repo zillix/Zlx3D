@@ -2,9 +2,11 @@ package wander
 {
 	import flash.geom.Point;
 	import org.flixel.*;
-	import wander.utils.MathUtils;
+	import wander.utils.ZMath;
 	/**
-	 * ...
+	 * Implementation of the FlxCamera.
+	 * Supports Z values, and several of the FlxCamera utilities in 3D (shake, etc).
+	 * Also contains functionality to follow a target through 3D space.
 	 * @author zillix
 	 */
 	public class Camera3D extends FlxCamera 
@@ -21,12 +23,20 @@ package wander
 		
 		public var position:ZlxPoint;
 		
+		// Used for following an object.
 		public var followDist:ZlxPoint;
 		public var followTarget:ZlxSprite;
 		public var followSpeed:ZlxPoint;
 		
+		// Used to pull the camera back when the follow target moves towards the camera.
+		public var followTimeReversed:Number = 0;
+		public static const PULL_BACK_REVERSE_TIME:Number = 0.5;
+		public static const PULL_BACK_REVERSE_VALUE:Number = 1.8;
+		
+		// Dimensions where the camera won't try to follow the player.
 		public var deadDist:ZlxPoint;
 		
+		// Called when the camera reaches the target.
 		public var reachTargetCallback:Function;
 		
 		public function Camera3D(X:int,Y:int,Width:int,Height:int,Zoom:Number=0)
@@ -50,16 +60,23 @@ package wander
 			deadDist = new ZlxPoint(100, 0, 100);
 		}
 		
-		public static var TIME_REVERSED:Number = 0.5;
 		public override function update():void
 		{
 			if (followTarget != null)
 			{
-				var followZ:Number = followDist.z;
-				if ((followTarget is Player) &&
-				(followTarget as Player).timeReversed > TIME_REVERSED)
+				if (ZlxPoint(followTarget.velocity).z < 0)
 				{
-					followZ *= 1.8;
+					followTimeReversed += FlxG.elapsed;
+				}
+				else
+				{
+					followTimeReversed = 0;
+				}
+				
+				var followZ:Number = followDist.z;
+				if (followTimeReversed > PULL_BACK_REVERSE_TIME)
+				{
+					followZ *= PULL_BACK_REVERSE_VALUE;
 				}
 				
 				var targetPoint:ZlxPoint = ZlxPoint.addVector(
@@ -226,7 +243,7 @@ package wander
 			}
 		}
 		
-			public function idleScan(object:ZlxSprite):void
+		public function idleScan(object:ZlxSprite):void
 		{
 			var oldTarget:ZlxSprite = followTarget;
 			var oldFollowDist:ZlxPoint = followDist;

@@ -3,10 +3,10 @@ package wander.utils
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxObject;
 	/**
-	 * ...
+	 * Various FlxGroup utilities I use in other projects.
 	 * @author zillix
 	 */
-	public class ZGroupUtils
+	public class ZGroups
 	{
 		public static function killGroup(gr:FlxGroup):void 
 		{

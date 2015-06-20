@@ -3,8 +3,8 @@ package wander
 	import org.flixel.*;
 	
 	/**
-	 * ...
-	 * @author 
+	 * Emits 3D particles in 3D space.
+	 * @author zillix
 	 */
 	public class Emitter3D extends FlxEmitter{
 	public var _ownLifespawn:Number = 0;
