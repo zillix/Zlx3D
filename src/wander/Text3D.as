@@ -1,9 +1,13 @@
 package wander
 {
 	import org.flixel.*;
+	import wander.utils.Z3D;
 	
 	/**
-	 * TODO(alex)
+	 * An implementation of a text field that supports distance scaling.
+	 * Note that this does *not* inherit from ZlxSprite-
+	 * 	it would have been a lot more work to re-implement the text rendering
+	 * 	from FlxText, and this class doesn't need a lot of the ZlxSprite functionality.
 	 * @author zillix
 	 */
 	public class Text3D extends FlxText
@@ -28,7 +32,7 @@ package wander
 		
 		public override function update():void
 		{
-			/*var camera:Camera3D = PlayState.camera;
+			var camera:Camera3D = Z3D.camera;
 			if (z > camera.position.z)
 			{
 				//var zScale:Number = 1;
@@ -43,7 +47,7 @@ package wander
 				
 				point.x += (_point.x > 0)?0.0000001:-0.0000001;
 				point.y += (_point.y > 0)?0.0000001: -0.0000001;
-			}*/
+			}
 			
 			super.update();
 		}
@@ -60,8 +64,7 @@ package wander
 			if(dirty)	//rarely 
 				calcFrame();
 			
-			//var camera:FlxCamera = FlxG.camera;
-			var camera:Camera3D = PlayState.camera;
+			var camera:Camera3D = Z3D.camera;
 			
 			if (!onScreen(camera))
 			{
@@ -111,32 +114,6 @@ package wander
 			}
 			
 			return true;
-			
-		/*	return  super.onScreen(Camera);
-			
-			
-			var camera:Camera3D = PlayState.camera;
-			getScreenXY(_point,camera);
-			_point.x = _point.x - offset.x;
-			_point.y = _point.y - offset.y;
-			
-			if (z < camera.z + camera.focalLength)
-			{
-				return false;
-			}
-
-			if(((angle == 0) || (_bakedRotation > 0)) && (scale.x == 1) && (scale.y == 1))
-				return ((_point.x + frameWidth > 0) && (_point.x < Camera.width) && (_point.y + frameHeight > 0) && (_point.y < Camera.height));
-			
-			var halfWidth:Number = frameWidth/2;
-			var halfHeight:Number = frameHeight/2;
-			var absScaleX:Number = (scale.x>0)?scale.x:-scale.x;
-			var absScaleY:Number = (scale.y>0)?scale.y:-scale.y;
-			var radius:Number = Math.sqrt(halfWidth*halfWidth+halfHeight*halfHeight)*((absScaleX >= absScaleY)?absScaleX:absScaleY);
-			_point.x += halfWidth;
-			_point.y += halfHeight;
-			return ((_point.x + radius > 0) && (_point.x - radius < Camera.width) && (_point.y + radius > 0) && (_point.y - radius < Camera.height));
-	*/
 		}
 		
 		

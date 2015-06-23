@@ -38,7 +38,7 @@ package wander.demos
 		private static const JUNK:uint = 0x1EDA02; // 30,218,2 (green)
 		private static const PILLAR:uint = 0x572F17; // 87 47 23 (brown)
 		private static const CLIMBABLE:uint = 0x1B02DA; // 27 2 218 (blue)
-		override protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : ZlxSprite
+		override protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : FlxObject
 		{
 			var gameObject:ZlxSprite;
 			switch(color)

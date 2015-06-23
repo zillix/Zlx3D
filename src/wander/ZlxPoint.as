@@ -35,6 +35,18 @@ package wander
 			return point;
 		}
 		
+		override public function copyTo(Point:FlxPoint):FlxPoint
+		{
+			super.copyTo(Point);
+			
+			if (Point is ZlxPoint)
+			{
+				ZlxPoint(Point).z = z;
+			}
+			
+			return Point;
+		}
+		
 	}
 	
 }

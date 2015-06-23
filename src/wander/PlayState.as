@@ -10,6 +10,7 @@ package wander
 	import org.flixel.system.*;
 	import wander.demos.Zlx3DDemo;
 	import wander.demos.ClimbDemo;
+	import wander.demos.TextDemo;
 
 	public class PlayState extends FlxState
 	{
@@ -29,7 +30,8 @@ package wander
 			
 			_demoList = Vector.<Class>(
 				[
-					ClimbDemo
+					ClimbDemo,
+					TextDemo
 				]
 			);
 			

@@ -154,7 +154,7 @@ package wander.demos
 			// Assume the map lies in the X/Z plane
 			var xPos:int = MAP_SCALE * (column - width / 2);
 			var zPos:int = MAP_SCALE * (height - row);
-			var gameObject:ZlxSprite;
+			var gameObject:FlxObject;
 			
 			gameObject = handleMapPixelColor(pixel, xPos, zPos);
 			
@@ -165,7 +165,7 @@ package wander.demos
 		}
 		
 		// To be overridden by child demo classes
-		protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : ZlxSprite
+		protected function handleMapPixelColor(color:uint, xPos:int, zPos:int) : FlxObject
 		{
 			return null;
 		}
