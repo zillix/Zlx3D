@@ -18,15 +18,13 @@ package wander
 		private var _demoText:FlxText;
 		
 		private var _demoList:Vector.<Class>;
+		private var _demoLayer:FlxGroup;
 		
 		override public function create():void
 		{
 			FlxG.bgColor = 0xffffffff;
 			
-			_demoText = new FlxText(50, 30, 200,
-				"1: Climbing");
-			_demoText.setFormat(null, 8, 0x000000);
-			add(_demoText);
+			_demoLayer = new FlxGroup();
 			
 			_demoList = Vector.<Class>(
 				[
@@ -35,7 +33,18 @@ package wander
 				]
 			);
 			
+			
+			add(_demoLayer);
 			setDemo(0);
+			
+			_demoText = new FlxText(-150, -150, 200,
+				"1: Climbing" +
+				"\n2: Text");
+			_demoText.setFormat(null, 16, 0xfffffffff);
+			_demoText.shadow = 0xff000000;
+		
+			add(_demoText);
+			
 			
 		}
 		
@@ -79,11 +88,11 @@ package wander
 			{
 				if (_activeDemo != null)
 				{
-					remove(_activeDemo);
+					_demoLayer.remove(_activeDemo);
 					_activeDemo.cleanUp();
 				}
 				_activeDemo = demo;
-				add(_activeDemo);
+				_demoLayer.add(_activeDemo);
 			}
 		}
 	}

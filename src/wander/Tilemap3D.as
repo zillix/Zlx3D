@@ -42,8 +42,12 @@ package wander
 				var zScale:Number = camera.focalLength / (z - camera.position.z);
 				
 				var buffer:FlxTilemapBuffer;
-				if(_buffers[0] == null)
-					_buffers[0] = new FlxTilemapBuffer(_tileWidth, _tileHeight, widthInTiles, heightInTiles, camera); // TODO(alex): Do I need this? , false);
+				if (_buffers[0] == null)
+				{
+					// Using a ZlxTilemapBuffer here, so it doesn't crop the rows or columns if they are too big to fit on the camera
+					_buffers[0] = new ZlxTilemapBuffer(_tileWidth, _tileHeight, widthInTiles, heightInTiles, camera, false);
+				}
+				
 				buffer = _buffers[0] as FlxTilemapBuffer;
 				
 				var dX:Number = zScale * (x - camera.position.x) - offset.x;

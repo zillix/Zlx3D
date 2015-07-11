@@ -104,7 +104,10 @@ package wander.demos
 		
 		private function onPlayerTouchObject(src:DemoPlayer, hit:ZlxSprite):void
 		{
-			src.setTouchedObject(hit);
+			if (hit is Climbable)
+			{
+				src.setTouchedObject(hit);
+			}
 		}
 		
 		public function loadMapImage(mapImage:Class):void

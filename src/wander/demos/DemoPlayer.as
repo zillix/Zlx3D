@@ -29,7 +29,7 @@ package wander.demos
 		public function DemoPlayer(X:int = 0, Y:int = 0, Z:int = 0)
 		{
 			super(X, Y, Z);
-			makeGraphic(HEIGHT, HEIGHT, 0xffffff00);
+			makeGraphic(HEIGHT, HEIGHT, 0xff888888);
 		}
 		
 		public function resetTouchedObject():void
