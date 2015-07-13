@@ -184,6 +184,10 @@ package wander
 				if (obj is ZlxSprite)
 				{
 					var object:ZlxSprite = obj as ZlxSprite;
+					
+					// NOTE(alex): This could/should be improved.
+					// This is a rough way to limit the collision checks, without using a real
+					// system like a quadtree
 					if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
 					{
 						if (ProcessCallback(source, object))
@@ -193,32 +197,6 @@ package wander
 								NotifyCallback(source, object);
 							}
 						
-						
-							return true;
-						}
-					}
-				}
-			}
-			return false;
-		}
-		
-		static public function shadowCollide(source:ZlxSprite=null, group:FlxGroup=null, NotifyCallback:Function=null):Boolean
-		{
-			for each (var obj:FlxBasic in group.members)
-			{
-				if (obj == source)
-				{
-					continue;
-				}
-				
-				if (obj is ZlxSprite)
-				{
-					var object:ZlxSprite = obj as ZlxSprite;
-					//if (Math.abs(source.z - object.z) < Z_DIST_CHECK)
-					{
-						if (collideZ(source, object))
-						{
-							NotifyCallback(source, object);
 							return true;
 						}
 					}
@@ -306,7 +284,7 @@ package wander
 				{
 					overlap *= 0.5;
 					
-					// todo(alex) offsets
+					// NOTE(alex): currently does not handle offsets
 					Object1.z = Object1.z - overlap;
 					Object2.z += overlap;
 

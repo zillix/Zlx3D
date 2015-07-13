@@ -58,23 +58,11 @@ package wander.demos
 			super.update();
 			
 			_objects.sort("z", DESCENDING);
-			
-			_player.resetTouchedObject();
-			
-			ZlxSprite.collide(_player, _objects, onPlayerTouchObject);
 		}
 		
 		protected function initPlayer() : DemoPlayer
 		{
 			return new DemoPlayer();
-		}
-		
-		private function onPlayerTouchObject(src:DemoPlayer, hit:ZlxSprite):void
-		{
-			if (hit is Climbable)
-			{
-				src.setTouchedObject(hit);
-			}
 		}
 		
 		public function loadMapImage(mapImage:Class):void

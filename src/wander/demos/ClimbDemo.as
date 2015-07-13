@@ -1,6 +1,7 @@
 package wander.demos
 {
 	import wander.Climbable;
+	import wander.Tilemap3D;
 	import wander.utils.*;
 	import org.flixel.*;
 	import wander.ZlxSprite;
@@ -39,6 +40,17 @@ package wander.demos
 		{
 			super.update();
 			
+				
+			_player.resetTouchedObject();
+			
+			// NOTE(alex):
+			// I would normally use ZlxSprite.collide here.
+			// However, we don't want to collide a grounded player
+			// with a part of a climbable object blocked by a climbmap,
+			// such as in the gap between an arch.
+			ZlxSprite.overlap(_player, _objects, onPlayerTouchObject, separateClimbZ);
+			
+			
 			if (DemoClimbingPlayer(_player).isClimbing && 
 				(_player.touchedObject is Climbable))
 			{
@@ -51,9 +63,45 @@ package wander.demos
 			}
 		}
 		
+		private function separateClimbZ(Object1:ZlxSprite, Object2:ZlxSprite):Boolean
+		{
+				if (Object1 is DemoPlayer
+					&& Object2 is Climbable)
+				{
+					var climbable:Climbable = Object2 as Climbable;
+					// If a grounded player touches a climbable
+					// and touches part of the climbMap that is blocked
+					// (such as a gap between the arch),
+					// we don't want to z-collide that player.
+					if (Z3D.climbOverlap(Object1, 
+											climbable,
+											function(object1 : ZlxSprite, tileMap : Tilemap3D):Boolean {
+												return tileMap.overlaps(object1);
+											}
+										)
+						)
+					{
+						return false;
+					}
+				}
+				
+				return ZlxSprite.separateZ(Object1, Object2);
+		}
+		
 		override protected function initPlayer() : DemoPlayer
 		{
 			return new DemoClimbingPlayer();
+		}
+		
+		private function onPlayerTouchObject(src:DemoPlayer, hit:ZlxSprite):void
+		{
+			if (hit is Climbable)
+			{
+				if (!Z3D.climbOverlap(src, hit as Climbable, FlxObject.separate))
+				{
+					src.setTouchedObject(hit);
+				}
+			}
 		}
 		
 		private static const SILLY_ROCK:uint = 0x1EDA02; // 30,218,2 (green)
