@@ -11,6 +11,7 @@ package wander
 	import wander.demos.Zlx3DDemo;
 	import wander.demos.ClimbDemo;
 	import wander.demos.TextDemo;
+	import wander.demos.BasicDemo;
 
 	public class PlayState extends FlxState
 	{
@@ -28,6 +29,7 @@ package wander
 			
 			_demoList = Vector.<Class>(
 				[
+					BasicDemo,
 					ClimbDemo,
 					TextDemo
 				]
@@ -35,11 +37,12 @@ package wander
 			
 			
 			add(_demoLayer);
-			setDemo(0);
+			setDemo(1);
 			
 			_demoText = new FlxText(-150, -150, 200,
-				"1: Climbing" +
-				"\n2: Text");
+				"1: Basic 3D" +
+				"\n2: Climbing" +
+				"\n3: Text");
 			_demoText.setFormat(null, 16, 0xfffffffff);
 			_demoText.shadow = 0xff000000;
 		
