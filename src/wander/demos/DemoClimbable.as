@@ -2,6 +2,7 @@ package wander.demos
 {
 	import org.flixel.FlxGroup;
 	import wander.Climbable;
+	import wander.Tilemap3D;
 	/**
 	 * Demo climbable object with a demo climbMap.
 	 * @author zillix
@@ -9,13 +10,25 @@ package wander.demos
 	public class DemoClimbable extends Climbable
 	{
 		
-		[Embed(source = "data/climbMap1.png")]	public var DemoClimbMap:Class;
+		private static const SCALE:int = 20;
 		
-		public function DemoClimbable(X:Number, Y:Number, Z:Number, parentLayer:FlxGroup, ClimbClass:Class = null)
+		public function DemoClimbable(X:Number,
+										Y:Number, 
+										Z:Number, 
+										parentLayer:FlxGroup, 
+										SpriteClass:Class,
+										ClimbMap:Class)
 		{
-			super(X, Y, Z, parentLayer, DemoClimbMap);
+			super(X, Y, Z, parentLayer, ClimbMap);
 			
-			makeGraphic(200, 400, 0xff0000ff);
+			loadGraphic(SpriteClass);
+			scale.x = scale.y = SCALE;
+			immovable = true;
+		}
+		
+		override protected function createTilemap() : Tilemap3D
+		{
+			return new DemoTilemap3D();
 		}
 		
 	}

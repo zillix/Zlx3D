@@ -27,7 +27,7 @@ package wander
 				return;
 			}
 			
-			tileMap = new Tilemap3D();
+			tileMap = createTilemap();
 			tileMap.loadMap(FlxTilemap.bitmapToCSV(FlxG.addBitmap(ClimbClass)), AutoTiles, 20, 20);
 			tileMap.z = Z - .01;
 			tileMap.y =  0;
@@ -35,6 +35,11 @@ package wander
 			tileMap.offset = new FlxPoint(tileMap.width / 2, tileMap.height);
 			tileMap.origin = new FlxPoint(tileMap.width / 2, tileMap.height);
 			parentLayer.add(tileMap);
+		}
+		
+		protected function createTilemap() : Tilemap3D
+		{
+			return new Tilemap3D();
 		}
 	}
 	

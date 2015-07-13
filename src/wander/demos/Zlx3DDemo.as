@@ -47,34 +47,7 @@ package wander.demos
 			camera.followDist = new ZlxPoint(0, -100, -camera.focalLength);
 			FlxG.resetCameras(camera);
 			
-				var junk:ZlxSprite;
-		/*	for (var i:int = 0; i < 20; i++)
-			{
-				junk = new GameObject(Math.random() * 1000 - 500, 0, Math.random() * 10000 + 1000);
-				junk.makeGraphic(Math.random() * 100 + 70, Math.random() * 100 + 50, 0xff00ff00);
-				junk.setOffsets();
-				objects.add(junk);
-			}*/
-			
-		/*	junk = new GameObject(0, 0, 100);// 15000);
-			junk.makeGraphic(1000, 5000, 0xffff0000);
-			junk.setOffsets();
-			junk.color = 0x44ffffff;
-			objects.add(junk);
-			*/
-			/*
-			arch = new GameObject(0, 0, 100);
-			arch.loadGraphic(ArchSprite);
-			arch.scale = new FlxPoint(10, 10);
-			arch.setOffsets();
-			objects.add(arch);
-			
-			
-			var pass:GameObject = new GameObject(0, 0, 1000);
-			pass.loadGraphic(PassSprite);
-			pass.scale = new FlxPoint(100, 10);
-			pass.setOffsets();
-			objects.add(pass);*/
+			setupHUD();
 			
 			// TODO(alex): Figure out if this actually gets used
 			//FlxG.setupPerpsective(GroundSprite);
@@ -85,12 +58,6 @@ package wander.demos
 			super.update();
 			
 			_objects.sort("z", DESCENDING);
-			
-			// TODO(alex)
-			/*if (FlxG.keys.justPressed("C"))
-			{
-				camera.startScan(arch);
-			}*/
 			
 			_player.resetTouchedObject();
 			
@@ -175,6 +142,23 @@ package wander.demos
 		
 		public function cleanUp() : void
 		{
+		}
+		
+		private function setupHUD() : void 
+		{
+			var instructions:FlxText = new FlxText(0,
+												-150,
+												200,
+												getInstructionsText());
+			instructions.setFormat(null, 12, 0xfffffffff);
+			instructions.shadow = 0xff000000;
+			add(instructions);
+		}
+		
+		protected function getInstructionsText() : String
+		{
+			return "ARROWS: move" +
+			"\nSPACE: jump";
 		}
 		
 	}
