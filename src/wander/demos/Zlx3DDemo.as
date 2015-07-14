@@ -5,8 +5,8 @@ package wander.demos
 	import org.flixel.*;
 	import wander.Camera3D;
 	import wander.Climbable;
-	import wander.ZlxPoint;
-	import wander.ZlxSprite;
+	import wander.Point3D;
+	import wander.Sprite3D;
 	
 	import wander.demos.*;
 	import wander.utils.*;
@@ -44,7 +44,7 @@ package wander.demos
 			camera.scroll.x = -FlxG.width / 2;
 			camera.scroll.y = -FlxG.height / 2;
 			camera.followTarget = _player;
-			camera.followDist = new ZlxPoint(0, -100, -camera.focalLength);
+			camera.followDist = new Point3D(0, -100, -camera.focalLength);
 			FlxG.resetCameras(camera);
 			
 			setupHUD();

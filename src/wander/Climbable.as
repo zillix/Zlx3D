@@ -3,19 +3,28 @@ package wander
 	import wander.*;
 	import org.flixel.*;
 	/**
-	 * A sprite containing a tilemap.
-	 * The tilemap is expected to bound out the non-climbable regions.
-	 * When the player comes into contact with a climbable, 
-	 * the movement is limited to the X/Y plane (can't move along the Z axis).
-	 * While climbing, the player is collided against the tilemap.
+	 * A Sprite3D that the player can climb when they come into contact with it.
+	 * 
+	 * @param parentLayer
+	 * 		The layer to which the climb map will be added. This usually doesn't matter, since they are normally invisible.
+	 * 
+	 * @param ClimbClass
+	 * 		A class definition for an embedded climb map png.
+	 * 		Black pixels in the climb map are interpreted as impassable, unclimbable regions.
+	 * 		Nonblack pixels are ignored.
+	 * 		Typically, you would create a climb map by copying the displayed sprite
+	 * 		and flood-filling the impassable regions with black.
+	 * 
 	 * @author zillix
 	 */
-	public class Climbable extends ZlxSprite 
+	public class Climbable extends Sprite3D 
 	{
 		[Embed(source = "data/climbTiles.png")]	public var AutoTiles:Class;
 		
-		public var tileMap:Tilemap3D;
-		public function Climbable(X:Number, Y:Number, Z:Number, parentLayer:FlxGroup, ClimbClass:Class = null)
+		private static const DEFAULT_SCALE:int = 20;
+		
+		private var _climbMap:Tilemap3D;
+		public function Climbable(X:Number, Y:Number, Z:Number, climbMapLayer:FlxGroup, ClimbClass:Class = null)
 		{
 			super(X, Y, Z);
 			
@@ -27,19 +36,30 @@ package wander
 				return;
 			}
 			
-			tileMap = createTilemap();
-			tileMap.loadMap(FlxTilemap.bitmapToCSV(FlxG.addBitmap(ClimbClass)), AutoTiles, 20, 20);
-			tileMap.z = Z - .01;
-			tileMap.y =  0;
-			tileMap.x = X;
-			tileMap.offset = new FlxPoint(tileMap.width / 2, tileMap.height);
-			tileMap.origin = new FlxPoint(tileMap.width / 2, tileMap.height);
-			parentLayer.add(tileMap);
+			scale = new Point3D(DEFAULT_SCALE, DEFAULT_SCALE, 1);
+			
+			_climbMap = createTilemap();
+			_climbMap.loadMap(FlxTilemap.bitmapToCSV(FlxG.addBitmap(ClimbClass)), AutoTiles, scale.x, scale.y);
+			_climbMap.x = X;
+			_climbMap.y = Y;
+			_climbMap.z = Z - .01;	// So it doesn't obscure the sprite, if visible
+			_climbMap.offset = new FlxPoint(_climbMap.width / 2, _climbMap.height);
+			_climbMap.origin = new FlxPoint(_climbMap.width / 2, _climbMap.height);
+
+			climbMapLayer.add(_climbMap);
 		}
 		
+		public function get climbMap() : Tilemap3D
+		{
+			return _climbMap;
+		}
+		
+		// Can be overridden by child classes
 		protected function createTilemap() : Tilemap3D
 		{
-			return new Tilemap3D();
+			var map:Tilemap3D = new Tilemap3D();
+			map.visible = false;
+			return map;
 		}
 	}
 	

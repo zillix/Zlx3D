@@ -6,18 +6,18 @@ package wander
 	 * Simple point that supports a Z value.
 	 * @author zillix
 	 */
-	public class ZlxPoint extends FlxPoint 
+	public class Point3D extends FlxPoint 
 	{
 		public var z:Number;
-		public function ZlxPoint(X:Number = 0, Y:Number = 0, Z:Number = 0)
+		public function Point3D(X:Number = 0, Y:Number = 0, Z:Number = 0)
 		{
 			super(X, Y);
 			z = Z;
 		}
 		
-		public static function getVector(srcPoint:ZlxPoint, dstPoint:ZlxPoint):ZlxPoint
+		public static function getVector(srcPoint:Point3D, dstPoint:Point3D):Point3D
 		{
-			var point:ZlxPoint = new ZlxPoint();
+			var point:Point3D = new Point3D();
 			dstPoint.copyTo(point);
 			point.x -= srcPoint.x;
 			point.y -= srcPoint.y;
@@ -25,9 +25,9 @@ package wander
 			return point;
 		}
 		
-		public static function addVector(srcPoint:ZlxPoint, vector:ZlxPoint) : ZlxPoint
+		public static function addVector(srcPoint:Point3D, vector:Point3D) : Point3D
 		{
-			var point:ZlxPoint = new ZlxPoint();
+			var point:Point3D = new Point3D();
 			srcPoint.copyTo(point);
 			point.x += vector.x;
 			point.y += vector.y;
@@ -39,9 +39,9 @@ package wander
 		{
 			super.copyTo(Point);
 			
-			if (Point is ZlxPoint)
+			if (Point is Point3D)
 			{
-				ZlxPoint(Point).z = z;
+				Point3D(Point).z = z;
 			}
 			
 			return Point;

@@ -7,8 +7,10 @@ package wander
 	import org.flixel.FlxU;
 	
 	/**
-	 * ...
-	 * @author ...
+	 * Overrides the constructor of the default FlxTilemapBuffer.
+	 * It normally crops the input rows and columns to fit within the camera,
+	 * which is not a useful function when we can have large, distance-scaled objects.
+	 * @author zillix
 	 */
 	public class ZlxTilemapBuffer extends FlxTilemapBuffer 
 	{

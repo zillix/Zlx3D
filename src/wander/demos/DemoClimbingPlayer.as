@@ -29,7 +29,7 @@ package wander.demos
 			}
 		}
 		
-		override public function setTouchedObject(obj:ZlxSprite):void
+		override public function setTouchedObject(obj:Sprite3D):void
 		{
 			if (!_isClimbing)
 			{
@@ -50,7 +50,7 @@ package wander.demos
 			// Start falling if we aren't climbing
 			if (!_isClimbing && y < 0)
 			{
-				acceleration.y = Zlx3DConfig.GRAVITY;
+				acceleration.y = Z3DConfig.GRAVITY;
 			}
 			
 			if (_isClimbing)
@@ -88,7 +88,7 @@ package wander.demos
 				}
 			}
 			// Can't move in the Z direction when off the ground and touching (but not climbing) something.
-			else if (y == Zlx3DConfig.GROUND_HEIGHT || !_touchedObject) 
+			else if (y == Z3DConfig.GROUND_HEIGHT || !_touchedObject) 
 			{
 				super.handleUpDown();
 			}

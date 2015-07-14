@@ -10,8 +10,6 @@ package wander.demos
 	public class DemoClimbable extends Climbable
 	{
 		
-		private static const SCALE:int = 20;
-		
 		public function DemoClimbable(X:Number,
 										Y:Number, 
 										Z:Number, 
@@ -22,7 +20,6 @@ package wander.demos
 			super(X, Y, Z, parentLayer, ClimbMap);
 			
 			loadGraphic(SpriteClass);
-			scale.x = scale.y = SCALE;
 			immovable = true;
 		}
 		

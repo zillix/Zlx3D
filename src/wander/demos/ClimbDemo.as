@@ -4,7 +4,7 @@ package wander.demos
 	import wander.Tilemap3D;
 	import wander.utils.*;
 	import org.flixel.*;
-	import wander.ZlxSprite;
+	import wander.Sprite3D;
 	/**
 	 * Demo class to show off the climbing functionality.
 	 * Spawns a climbable wall, and some decorations.
@@ -48,7 +48,7 @@ package wander.demos
 			// However, we don't want to collide a grounded player
 			// with a part of a climbable object blocked by a climbmap,
 			// such as in the gap between an arch.
-			ZlxSprite.overlap(_player, _objects, onPlayerTouchObject, separateClimbZ);
+			Sprite3D.overlap(_player, _objects, onPlayerTouchObject, separateClimbZ);
 			
 			
 			if (DemoClimbingPlayer(_player).isClimbing && 
@@ -63,7 +63,7 @@ package wander.demos
 			}
 		}
 		
-		private function separateClimbZ(Object1:ZlxSprite, Object2:ZlxSprite):Boolean
+		private function separateClimbZ(Object1:Sprite3D, Object2:Sprite3D):Boolean
 		{
 				if (Object1 is DemoPlayer
 					&& Object2 is Climbable)
@@ -75,7 +75,7 @@ package wander.demos
 					// we don't want to z-collide that player.
 					if (Z3D.climbOverlap(Object1, 
 											climbable,
-											function(object1 : ZlxSprite, tileMap : Tilemap3D):Boolean {
+											function(object1 : Sprite3D, tileMap : Tilemap3D):Boolean {
 												return tileMap.overlaps(object1);
 											}
 										)
@@ -85,7 +85,7 @@ package wander.demos
 					}
 				}
 				
-				return ZlxSprite.separateZ(Object1, Object2);
+				return Sprite3D.separateZ(Object1, Object2);
 		}
 		
 		override protected function initPlayer() : DemoPlayer
@@ -93,7 +93,7 @@ package wander.demos
 			return new DemoClimbingPlayer();
 		}
 		
-		private function onPlayerTouchObject(src:DemoPlayer, hit:ZlxSprite):void
+		private function onPlayerTouchObject(src:DemoPlayer, hit:Sprite3D):void
 		{
 			if (hit is Climbable)
 			{

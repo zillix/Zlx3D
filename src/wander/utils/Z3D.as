@@ -5,7 +5,7 @@ package wander.utils
 	import org.flixel.system.*;
 	import wander.Camera3D;
 	import wander.Climbable;
-	import wander.ZlxSprite;
+	import wander.Sprite3D;
 	import wander.Tilemap3D;
 	
 	/**
@@ -17,7 +17,7 @@ package wander.utils
 		
 		public static function climbOverlap(object1:FlxSprite = null, climbable:Climbable = null, NotifyCallback:Function = null, ProcessCallback:Function = null):Boolean
 		{
-			var tilemap:Tilemap3D = climbable.tileMap;
+			var tilemap:Tilemap3D = climbable.climbMap;
 			tilemap.x -= tilemap.offset.x;
 			tilemap.y -= tilemap.offset.y;
 			tilemap.last.x = tilemap.x;
@@ -43,7 +43,7 @@ package wander.utils
 			return result;
 		}
 		
-		public static function fitObjectInsideBounds(gameObject:ZlxSprite, bounds:Rectangle):void
+		public static function fitObjectInsideBounds(gameObject:Sprite3D, bounds:Rectangle):void
 		{
 			var direction:int = 0;
 			if (gameObject.x < bounds.x)

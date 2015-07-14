@@ -9,7 +9,7 @@ package wander.demos
 	 */
 	
 	import org.flixel.*;
-	public class DemoPlayer extends ZlxSprite 
+	public class DemoPlayer extends Sprite3D 
 	{
 		protected var upKey:String = "UP";
 		protected var downKey:String = "DOWN";
@@ -21,7 +21,7 @@ package wander.demos
 		protected static const JUMP_SPEED:int = 400;
 		public static const HEIGHT:int = 50;
 		
-		protected var _touchedObject:ZlxSprite;
+		protected var _touchedObject:Sprite3D;
 		
 		protected var _jumped:Boolean = false;
 		
@@ -37,7 +37,7 @@ package wander.demos
 			_touchedObject = null;
 		}
 		
-		public function setTouchedObject(obj:ZlxSprite):void
+		public function setTouchedObject(obj:Sprite3D):void
 		{
 			_touchedObject = obj;
 		}
@@ -48,7 +48,7 @@ package wander.demos
 			
 			// If falling and we hit the ground
 			if (velocity.y > 0
-					&& y + velocity.y * FlxG.elapsed > Zlx3DConfig.GROUND_HEIGHT)
+					&& y + velocity.y * FlxG.elapsed > Z3DConfig.GROUND_HEIGHT)
 			{
 				onHitGround();
 			}
@@ -61,7 +61,7 @@ package wander.demos
 			_jumped = false;
 			acceleration.y = 0;
 			velocity.y = 0;
-			y = Zlx3DConfig.GROUND_HEIGHT;
+			y = Z3DConfig.GROUND_HEIGHT;
 		}
 		
 		protected function handleInput() : void
@@ -92,15 +92,15 @@ package wander.demos
 			// Z axis movement
 			if (FlxG.keys.pressed(upKey))
 			{
-				ZlxPoint(velocity).z = WALK_SPEED;
+				Point3D(velocity).z = WALK_SPEED;
 			}
 			else if (FlxG.keys.pressed(downKey))
 			{
-				ZlxPoint(velocity).z = -WALK_SPEED;
+				Point3D(velocity).z = -WALK_SPEED;
 			}
 			else
 			{
-				ZlxPoint(velocity).z = 0;
+				Point3D(velocity).z = 0;
 			}
 		}
 		
@@ -116,7 +116,7 @@ package wander.demos
 			}
 		}
 		
-		public function get touchedObject() : ZlxSprite
+		public function get touchedObject() : Sprite3D
 		{
 			return _touchedObject;
 		}

@@ -11,7 +11,7 @@ package wander
 	 */
 	public class Camera3D extends FlxCamera 
 	{
-		private var scrollSpeed:ZlxPoint;
+		private var scrollSpeed:Point3D;
 		
 		public var focalLength:int = 200;
 		public var fieldOfView:int;
@@ -21,12 +21,12 @@ package wander
 		public var viewHeight:Number;
 		public var viewWidth:Number;
 		
-		public var position:ZlxPoint;
+		public var position:Point3D;
 		
 		// Used for following an object.
-		public var followDist:ZlxPoint;
-		public var followTarget:ZlxSprite;
-		public var followSpeed:ZlxPoint;
+		public var followDist:Point3D;
+		public var followTarget:Sprite3D;
+		public var followSpeed:Point3D;
 		
 		// Used to pull the camera back when the follow target moves towards the camera.
 		public var followTimeReversed:Number = 0;
@@ -34,7 +34,7 @@ package wander
 		public static const PULL_BACK_REVERSE_VALUE:Number = 1.8;
 		
 		// Dimensions where the camera won't try to follow the player.
-		public var deadDist:ZlxPoint;
+		public var deadDist:Point3D;
 		
 		// Called when the camera reaches the target.
 		public var reachTargetCallback:Function;
@@ -43,7 +43,7 @@ package wander
 		{
 			init();
 		
-			position = new ZlxPoint();
+			position = new Point3D();
 			ratio = FlxG.height / FlxG.width;
 			z = 0;
 			
@@ -55,16 +55,16 @@ package wander
 		
 		public function init():void
 		{
-			scrollSpeed = new ZlxPoint(100, 100, 100);
-			followSpeed = new ZlxPoint(300, 300, 500);
-			deadDist = new ZlxPoint(100, 0, 100);
+			scrollSpeed = new Point3D(100, 100, 100);
+			followSpeed = new Point3D(300, 300, 500);
+			deadDist = new Point3D(100, 0, 100);
 		}
 		
 		public override function update():void
 		{
 			if (followTarget != null)
 			{
-				if (ZlxPoint(followTarget.velocity).z < 0)
+				if (Point3D(followTarget.velocity).z < 0)
 				{
 					followTimeReversed += FlxG.elapsed;
 				}
@@ -79,12 +79,12 @@ package wander
 					followZ *= PULL_BACK_REVERSE_VALUE;
 				}
 				
-				var targetPoint:ZlxPoint = ZlxPoint.addVector(
-					new ZlxPoint(
+				var targetPoint:Point3D = Point3D.addVector(
+					new Point3D(
 						followTarget.x,
 						followTarget.y,
 						followTarget.z),
-					new ZlxPoint(
+					new Point3D(
 						followDist.x,
 						followDist.y, 
 						followZ));
@@ -123,7 +123,6 @@ package wander
 			{
 				focalLength += FlxG.elapsed * scrollSpeed.z;
 			}
-			
 				
 			//Update the "flash" special effect
 			if(_fxFlashAlpha > 0.0)
@@ -165,12 +164,9 @@ package wander
 						_fxShakeOffset.y = (FlxG.random()*_fxShakeIntensity*height*2-_fxShakeIntensity*height)*_zoom;
 				}
 			}
-	
-			
-		
 		}
 		
-		private function moveToward(point:ZlxPoint):void
+		private function moveToward(point:Point3D):void
 		{
 			if (Math.abs(position.x - point.x) > deadDist.x)
 			{
@@ -219,63 +215,6 @@ package wander
 					reachTargetCallback = null;
 				}
 			}
-		}
-		
-		
-		
-		public function startScan(object:ZlxSprite):void
-		{
-			var oldTarget:ZlxSprite = followTarget;
-			var oldFollowDist:ZlxPoint = followDist;
-			followTarget = object;
-			
-			var xBuffer:int = 20;
-			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new ZlxPoint(object.x, object.y - object.height * object.scale.y + 20, desiredZ);
-			followSpeed.y = 150;
-			deadDist = new ZlxPoint();
-			
-			reachTargetCallback = function():void 
-			{ 
-				init();
-				followTarget = oldTarget; 
-				followDist = oldFollowDist;
-			}
-		}
-		
-		public function idleScan(object:ZlxSprite):void
-		{
-			var oldTarget:ZlxSprite = followTarget;
-			var oldFollowDist:ZlxPoint = followDist;
-			followTarget = object;
-			
-			var xBuffer:int = 20;
-			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new ZlxPoint(0, object.y - object.height * object.scale.y + 20, desiredZ);
-			followSpeed.y = 100;
-			deadDist = new ZlxPoint();
-			
-			reachTargetCallback = function():void 
-			{ 
-				init();
-				followTarget = oldTarget; 
-				followDist = oldFollowDist;
-			}
-		}
-		
-		public function endScan(object:ZlxSprite, callback:Function = null):void
-		{
-			var oldTarget:ZlxSprite = followTarget;
-			var oldFollowDist:FlxPoint = followDist;
-			followTarget = object;
-			
-			var xBuffer:int = 2;
-			var desiredZ:Number = -(object.width * object.scale.x * focalLength) / (FlxG.width - xBuffer);
-			followDist = new ZlxPoint(0, object.y - object.height * object.scale.y / 2, desiredZ);
-			followSpeed.y = 100;
-			deadDist = new ZlxPoint();
-			
-			reachTargetCallback = callback;
 		}
 		
 		override public function fill(Color:uint,BlendAlpha:Boolean=true):void

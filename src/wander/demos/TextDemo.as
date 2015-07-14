@@ -4,7 +4,7 @@ package wander.demos
 	import wander.Text3D;
 	import wander.utils.*;
 	import org.flixel.*;
-	import wander.ZlxSprite;
+	import wander.Sprite3D;
 	/**
 	 * Demo class to show off text in 3D
 	 * @author zillix
@@ -26,7 +26,7 @@ package wander.demos
 		{
 			var text:String = "empty";
 			var fontSize:int = 12;
-			var background:ZlxSprite;
+			var background:Sprite3D;
 			var width:int = 100;
 			switch(color)
 			{
@@ -36,7 +36,7 @@ package wander.demos
 					fontSize = 40;
 					width = 140;
 					
-					background = new ZlxSprite(xPos, 0, zPos + 1); // so it is behind
+					background = new Sprite3D(xPos, 0, zPos + 1); // so it is behind
 					background.makeGraphic(200, 150, 0xff00ff00);
 					background.immovable = true;
 					_objects.add(background);
@@ -47,7 +47,7 @@ package wander.demos
 					fontSize = 127; 	// Max font size in as3
 					width = 700;
 					
-					background = new ZlxSprite(xPos, 0, zPos + 1); // so it is behind
+					background = new Sprite3D(xPos, 0, zPos + 1); // so it is behind
 					background.makeGraphic(1000, 5000, 0xffff0000);
 					background.immovable = true;
 					_objects.add(background);
@@ -58,7 +58,7 @@ package wander.demos
 					fontSize = 15;
 					width = 100;
 					
-					background = new ZlxSprite(xPos, 0, zPos + 1); // so it is behind
+					background = new Sprite3D(xPos, 0, zPos + 1); // so it is behind
 					background.makeGraphic(200, 200, 0xffff0000);
 					background.immovable = true;
 					_objects.add(background);
