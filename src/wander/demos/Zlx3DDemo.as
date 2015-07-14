@@ -40,7 +40,7 @@ package wander.demos
 			_objects.add(_player);
 			
 			// Set up the 3D camera
-			var camera:Camera3D = new Camera3D(0, 0, FlxG.width, FlxG.height)
+			var camera:Camera3D = new DemoCamera3D(0, 0, FlxG.width, FlxG.height)
 			camera.scroll.x = -FlxG.width / 2;
 			camera.scroll.y = -FlxG.height / 2;
 			camera.followTarget = _player;
@@ -145,8 +145,10 @@ package wander.demos
 		
 		protected function getInstructionsText() : String
 		{
-			return "ARROWS: move" +
-			"\nSPACE: jump";
+			return "WASD: Pan camera" +
+			"\nQ/E: Adjust focal length" +
+			"\nARROWS: Move player" +
+			"\nSPACE: Jump player";
 		}
 		
 	}

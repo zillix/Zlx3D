@@ -11,8 +11,6 @@ package wander
 	 */
 	public class Camera3D extends FlxCamera 
 	{
-		private var scrollSpeed:Point3D;
-		
 		public var focalLength:int = 200;
 		public var fieldOfView:int;
 		public var ratio:Number;
@@ -28,8 +26,10 @@ package wander
 		public var followTarget:Sprite3D;
 		public var followSpeed:Point3D;
 		
+		public var scrollSpeed:Point3D;
+		
 		// Used to pull the camera back when the follow target moves towards the camera.
-		public var followTimeReversed:Number = 0;
+		protected var _followTimeReversed:Number = 0;
 		public static const PULL_BACK_REVERSE_TIME:Number = 0.5;
 		public static const PULL_BACK_REVERSE_VALUE:Number = 1.8;
 		
@@ -55,9 +55,9 @@ package wander
 		
 		public function init():void
 		{
-			scrollSpeed = new Point3D(100, 100, 100);
+			scrollSpeed = new Point3D(150, 100, 100);
 			followSpeed = new Point3D(300, 300, 500);
-			deadDist = new Point3D(100, 0, 100);
+			deadDist = new Point3D(50, 0, 100);
 		}
 		
 		public override function update():void
@@ -66,15 +66,17 @@ package wander
 			{
 				if (Point3D(followTarget.velocity).z < 0)
 				{
-					followTimeReversed += FlxG.elapsed;
+					_followTimeReversed += FlxG.elapsed;
 				}
 				else
 				{
-					followTimeReversed = 0;
+					_followTimeReversed = 0;
 				}
 				
+				// If the follow target has been reversing for enough time,
+				//		pull back the camera for a better view.
 				var followZ:Number = followDist.z;
-				if (followTimeReversed > PULL_BACK_REVERSE_TIME)
+				if (_followTimeReversed > PULL_BACK_REVERSE_TIME)
 				{
 					followZ *= PULL_BACK_REVERSE_VALUE;
 				}
@@ -91,37 +93,6 @@ package wander
 					
 				moveToward(targetPoint);
 					
-			}
-			
-				
-			if (FlxG.keys.W)
-			{
-				followDist.y += FlxG.elapsed * scrollSpeed.y;
-			}
-			
-			if (FlxG.keys.S)
-			{
-				followDist.y -= FlxG.elapsed * scrollSpeed.y;
-			}
-			
-			if (FlxG.keys.A)
-			{
-				followDist.x -= FlxG.elapsed * scrollSpeed.x;
-			}
-			
-			if (FlxG.keys.D)
-			{
-				followDist.x += FlxG.elapsed * scrollSpeed.x;
-			}
-			
-			if (FlxG.keys.U)
-			{
-				focalLength -= FlxG.elapsed * scrollSpeed.z;
-			}
-			
-			if (FlxG.keys.I)
-			{
-				focalLength += FlxG.elapsed * scrollSpeed.z;
 			}
 				
 			//Update the "flash" special effect
@@ -140,9 +111,6 @@ package wander
 				{
 					if(_fxFadeComplete != null)
 						_fxFadeComplete();
-						
-					//_fxFadeAlpha = 0.0;
-					
 				}
 			}
 			
@@ -172,11 +140,11 @@ package wander
 			{
 				if (position.x < point.x)
 				{
-					position.x = Math.min(point.x, position.x + FlxG.elapsed * followSpeed.x);
+					position.x = Math.min(point.x - deadDist.x, position.x + FlxG.elapsed * followSpeed.x);
 				}
 				if (position.x > point.x)
 				{
-					position.x = Math.max(point.x,position. x - FlxG.elapsed * followSpeed.x);
+					position.x = Math.max(point.x + deadDist.x,position. x - FlxG.elapsed * followSpeed.x);
 				}
 			}
 			
@@ -184,11 +152,11 @@ package wander
 			{
 				if (position.y < point.y)
 				{
-					position.y = Math.min(point.y, position.y + FlxG.elapsed * followSpeed.y);
+					position.y = Math.min(point.y - deadDist.y, position.y + FlxG.elapsed * followSpeed.y);
 				}
 				if (position.y > point.y)
 				{
-					position.y = Math.max(point.y, position.y - FlxG.elapsed * followSpeed.y);
+					position.y = Math.max(point.y + deadDist.y, position.y - FlxG.elapsed * followSpeed.y);
 				}
 			}
 			
@@ -197,11 +165,11 @@ package wander
 			{
 				if (position.z < point.z)
 				{
-					position.z = Math.min(point.z, position.z + FlxG.elapsed * followSpeed.z);
+					position.z = Math.min(point.z - deadDist.z, position.z + FlxG.elapsed * followSpeed.z);
 				}
 				if (position.z > point.z)
 				{
-					position.z = Math.max(point.z, position.z - FlxG.elapsed * followSpeed.z);
+					position.z = Math.max(point.z + deadDist.z, position.z - FlxG.elapsed * followSpeed.z);
 				}
 			}
 			
