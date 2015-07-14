@@ -48,9 +48,6 @@ package wander.demos
 			FlxG.resetCameras(camera);
 			
 			setupHUD();
-			
-			// TODO(alex): Figure out if this actually gets used
-			//FlxG.setupPerpsective(GroundSprite);
 		}
 	
 		override public function update() : void

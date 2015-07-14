@@ -358,7 +358,7 @@ package wander
 		
 		public function get bottom():Number
 		{
-			return y ; 
+			return y; 
 		}
 		
 		public function moveTowards(point:Point3D, speed:Number, threshold:Number):Boolean

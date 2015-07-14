@@ -12,6 +12,12 @@ package wander
 	import wander.demos.ClimbDemo;
 	import wander.demos.TextDemo;
 	import wander.demos.BasicDemo;
+	
+	/**
+	 * Simple harness that loads and runs various demos, depending on the key pressed.
+	 * 
+	 * @author zillix
+	 */
 
 	public class PlayState extends FlxState
 	{
