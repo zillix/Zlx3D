@@ -134,8 +134,8 @@ package wander.demos
 		
 		private function setupHUD() : void 
 		{
-			var instructions:FlxText = new FlxText(0,
-												-150,
+			var instructions:FlxText = new FlxText(50,
+												-220,
 												200,
 												getInstructionsText());
 			instructions.setFormat(null, 12, 0xfffffffff);

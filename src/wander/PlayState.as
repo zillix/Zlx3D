@@ -39,7 +39,7 @@ package wander
 			add(_demoLayer);
 			setDemo(1);
 			
-			_demoText = new FlxText(-150, -150, 200,
+			_demoText = new FlxText(-220, -220, 200,
 				"1: Basic 3D" +
 				"\n2: Climbing" +
 				"\n3: Text");
