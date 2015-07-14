@@ -23,7 +23,9 @@ package wander
 		
 		private static const DEFAULT_SCALE:int = 20;
 		
-		private var _climbMap:Tilemap3D;
+		private var _unclimbableMap:Tilemap3D;	// Blocked regions. Used for collision while climbing.
+		private var _climbableMap:Tilemap3D;	// Unblocked regions. Used for collision with the climbable.
+		
 		public function Climbable(X:Number, Y:Number, Z:Number, climbMapLayer:FlxGroup, ClimbClass:Class = null)
 		{
 			super(X, Y, Z);
@@ -38,20 +40,42 @@ package wander
 			
 			scale = new Point3D(DEFAULT_SCALE, DEFAULT_SCALE, 1);
 			
-			_climbMap = createTilemap();
-			_climbMap.loadMap(FlxTilemap.bitmapToCSV(FlxG.addBitmap(ClimbClass)), AutoTiles, scale.x, scale.y);
-			_climbMap.x = X;
-			_climbMap.y = Y;
-			_climbMap.z = Z - .01;	// So it doesn't obscure the sprite, if visible
-			_climbMap.offset = new FlxPoint(_climbMap.width / 2, _climbMap.height);
-			_climbMap.origin = new FlxPoint(_climbMap.width / 2, _climbMap.height);
+			_unclimbableMap = setUpMap(ClimbClass, false);
+			_climbableMap = setUpMap(ClimbClass, true);
 
-			climbMapLayer.add(_climbMap);
+			climbMapLayer.add(_unclimbableMap);
 		}
 		
-		public function get climbMap() : Tilemap3D
+		private function setUpMap(ClimbClass:Class, invert:Boolean) : Tilemap3D
 		{
-			return _climbMap;
+			var map:Tilemap3D = createTilemap();
+			map.loadMap(FlxTilemap.bitmapToCSV(
+								FlxG.addBitmap(ClimbClass),
+								invert
+							), 
+							AutoTiles, 
+							scale.x, 
+							scale.y
+						);
+			map.x = x;
+			map.y = y;
+			map.z = z - .01;	// So it doesn't obscure the sprite, if visible
+			map.offset = new FlxPoint(map.width / 2, map.height);
+			map.origin = new FlxPoint(map.width / 2, map.height);
+			
+			return map;
+		}
+		
+		// Defines the *blocked* regions
+		public function get unclimbableMap() : Tilemap3D
+		{
+			return _unclimbableMap;
+		}
+		
+		// Defines the *unblocked* regions
+		public function get climbableMap() : Tilemap3D
+		{
+			return _climbableMap;
 		}
 		
 		// Can be overridden by child classes

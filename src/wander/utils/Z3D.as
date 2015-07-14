@@ -15,9 +15,15 @@ package wander.utils
 	public class Z3D 
 	{
 		
-		public static function climbOverlap(object1:FlxSprite = null, climbable:Climbable = null, NotifyCallback:Function = null, ProcessCallback:Function = null):Boolean
+		public static function climbOverlap(object1:FlxSprite, tilemap:Tilemap3D, ProcessCallback:Function = null):Boolean
 		{
-			var tilemap:Tilemap3D = climbable.climbMap;
+			/*
+			 * We set up the object and tilemap so that they can be
+			 * effectively collided in the X/Y plane.
+			 * 
+			 * Typically, ProcessCallback would be called with Sprite3D.separateZ
+			 */
+			
 			tilemap.x -= tilemap.offset.x;
 			tilemap.y -= tilemap.offset.y;
 			tilemap.last.x = tilemap.x;
@@ -29,8 +35,9 @@ package wander.utils
 			object1.last.y -= object1.offset.y;
 			
 			var saveScale:FlxPoint = object1.scale;
-			var result:Boolean = NotifyCallback(object1, tilemap);
+			var result:Boolean = ProcessCallback(object1, tilemap);
 			object1.scale = saveScale;
+			
 			tilemap.x += tilemap.offset.x;
 			tilemap.y += tilemap.offset.y;
 			tilemap.last.x = tilemap.x;

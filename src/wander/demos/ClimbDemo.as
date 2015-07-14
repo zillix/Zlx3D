@@ -54,7 +54,7 @@ package wander.demos
 			if (DemoClimbingPlayer(_player).isClimbing && 
 				(_player.touchedObject is Climbable))
 			{
-				Z3D.climbOverlap(_player, (_player.touchedObject as Climbable), FlxObject.separate);
+				Z3D.climbOverlap(_player, (_player.touchedObject as Climbable).unclimbableMap, FlxObject.separate);
 			}
 			
 			if (FlxG.keys.justPressed("Z"))
@@ -70,11 +70,11 @@ package wander.demos
 				{
 					var climbable:Climbable = Object2 as Climbable;
 					// If a grounded player touches a climbable
-					// and touches part of the climbMap that is blocked
+					// doesn't touch part of the climbable region
 					// (such as a gap between the arch),
 					// we don't want to z-collide that player.
-					if (Z3D.climbOverlap(Object1, 
-											climbable,
+					if (!Z3D.climbOverlap(Object1, 
+											climbable.climbableMap,
 											function(object1 : Sprite3D, tileMap : Tilemap3D):Boolean {
 												return tileMap.overlaps(object1);
 											}
@@ -97,7 +97,7 @@ package wander.demos
 		{
 			if (hit is Climbable)
 			{
-				if (!Z3D.climbOverlap(src, hit as Climbable, FlxObject.separate))
+				if (!Z3D.climbOverlap(src, (hit as Climbable).unclimbableMap, FlxObject.separate))
 				{
 					src.setTouchedObject(hit);
 				}
