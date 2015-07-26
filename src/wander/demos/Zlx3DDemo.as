@@ -44,7 +44,7 @@ package wander.demos
 			camera.scroll.x = -FlxG.width / 2;
 			camera.scroll.y = -FlxG.height / 2;
 			camera.followTarget = _player;
-			camera.followDist = new Point3D(0, -100, -camera.focalLength);
+			camera.followDist = new Point3D(0, -FlxG.height / 5, -camera.focalLength);
 			FlxG.resetCameras(camera);
 			
 			setupHUD();
@@ -131,8 +131,8 @@ package wander.demos
 		
 		private function setupHUD() : void 
 		{
-			var instructions:FlxText = new FlxText(50,
-												-220,
+			var instructions:FlxText = new FlxText(FlxG.width / 2 - 180,
+												-FlxG.height / 2 + 10,
 												200,
 												getInstructionsText());
 			instructions.setFormat(null, 12, 0xfffffffff);

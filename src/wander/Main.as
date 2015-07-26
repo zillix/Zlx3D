@@ -1,13 +1,14 @@
 package wander
 {
+	import flash.events.Event;
 	import org.flixel.*;
-	[SWF(width="450", height="450", backgroundColor="#123456")]
+	[SWF(width="370", height="320", backgroundColor="#123456")]
 	[Frame(factoryClass="wander.Preloader")]
 	public class Main extends FlxGame
 	{
 		public function Main():void
 		{
-			super(450, 450, PlayState, 1);
+			super(370, 320, PlayState, 1);
 		}
 	}
 }

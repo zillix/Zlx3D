@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\wander.swf" />
+    <movie path="bin\zlx3d.swf" />
     <movie fps="30" />
     <movie width="800" />
     <movie height="600" />

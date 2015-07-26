@@ -45,7 +45,7 @@ package wander
 			add(_demoLayer);
 			setDemo(1);
 			
-			_demoText = new FlxText(-220, -220, 200,
+			_demoText = new FlxText(- FlxG.width / 2 + 10, -FlxG.height / 2 + 10, 200,
 				"1: Basic 3D" +
 				"\n2: Climbing" +
 				"\n3: Text");
@@ -53,7 +53,6 @@ package wander
 			_demoText.shadow = 0xff000000;
 		
 			add(_demoText);
-			
 			
 		}
 		
