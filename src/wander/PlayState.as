@@ -12,6 +12,8 @@ package wander
 	import wander.demos.ClimbDemo;
 	import wander.demos.TextDemo;
 	import wander.demos.BasicDemo;
+	import flash.ui.Mouse;
+	import flash.events.Event;
 	
 	/**
 	 * Simple harness that loads and runs various demos, depending on the key pressed.
@@ -53,6 +55,10 @@ package wander
 			_demoText.shadow = 0xff000000;
 		
 			add(_demoText);
+			
+			Mouse.show();
+			
+			FlxG.stage.dispatchEvent(new Event(Event.DEACTIVATE));
 			
 		}
 		
