@@ -9,6 +9,7 @@ package wander
 		public function Main():void
 		{
 			super(370, 320, PlayState, 1);
+			useSystemCursor = true;
 		}
 	}
 }

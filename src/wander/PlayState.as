@@ -37,29 +37,28 @@ package wander
 			
 			_demoList = Vector.<Class>(
 				[
-					BasicDemo,
 					ClimbDemo,
+					BasicDemo,
 					TextDemo
 				]
 			);
 			
 			
 			add(_demoLayer);
-			setDemo(1);
+			setDemo(0);
 			
 			_demoText = new FlxText(- FlxG.width / 2 + 10, -FlxG.height / 2 + 10, 200,
-				"1: Basic 3D" +
-				"\n2: Climbing" +
+				"\n1: Climbing" +
+				"\n2: Basic 3D" +
 				"\n3: Text");
 			_demoText.setFormat(null, 16, 0xfffffffff);
 			_demoText.shadow = 0xff000000;
 		
 			add(_demoText);
 			
-			Mouse.show();
-			
+			// Start the game paused.
+			// This can be disabled while testing locally.
 			FlxG.stage.dispatchEvent(new Event(Event.DEACTIVATE));
-			
 		}
 		
 		override public function update():void

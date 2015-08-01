@@ -30,6 +30,8 @@ package wander.demos
 		{
 			super(X, Y, Z);
 			makeGraphic(HEIGHT, HEIGHT, 0xff888888);
+		
+			acceleration.y = Z3DConfig.GRAVITY;
 		}
 		
 		public function resetTouchedObject():void
@@ -112,6 +114,7 @@ package wander.demos
 				{
 					_jumped = true;
 					velocity.y = -JUMP_SPEED;
+					acceleration.y = Z3DConfig.GRAVITY;
 				}
 			}
 		}
